@@ -242,8 +242,14 @@ hr.items:after{
     display: block;
 }
 
+.banner {
+    max-width: 900px;
+    margin: auto;
+}
+
 .banner img {
     width: 100%;
+
 }
 @media(max-width:760px){
     .table.activitites thead::after{
