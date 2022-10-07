@@ -276,7 +276,7 @@ function updateCarts() {
     </tr>`
     }
     if (!carts.length) {
-        html = '<tr><td colspan=7><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
+        html = '<tr><td colspan=8><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
     }
     $('#carts').html(html);
     $('#total-count').html(carts.length);
