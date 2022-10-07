@@ -12,188 +12,37 @@
 </head>
 
 <body>
+    <div class="background-mask"></div>
+    <div class="banner">
+        <img src="./img/banner.jpg" />
+    </div>
     <div class="wrapper">
         <div class="d-flex align-items-center justify-content-between">
             <div class="d-flex flex-column">
                 <div class="h3">Shopping Cart</div>
                 <div class="text-uppercase">6 items</div>
             </div>
-            <div class="ml-auto btn"><span class="fas fa-cog"></span></div>
-            <div class="btn" id="sub">
+            <div class="btn" id="add-cart">
                 + Add Cart
             </div>
         </div>
         <div id="table" class="bg-white rounded">
             <hr>
-            <div class="table-responsive">
-                <table class="table activitites">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-uppercase header">item</th>
-                            <th scope="col" class="text-uppercase">Quantity</th>
-                            <th scope="col" class="text-uppercase">price each</th>
-                            <th scope="col" class="text-uppercase">total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td class="item">
-                                <div class="d-flex">
-                                    <img src="https://images.unsplash.com/photo-1601479604588-68d9e6d386b5?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8Y2FuZGxlc3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                                        alt="">
-                                    <div class="pl-2">
-                                        Suspended Heart Candles
-                                        <div class="text-uppercase new"><span class="fas fa-star"></span>new</div>
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <div class="text-muted">Blue</div>
-                                            <div><a href="#"><span class="red text-uppercase"><span
-                                                            class="fas fa-comment pr-1"></span>add a comment</span></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </td>
-                            <td>120</td>
-                            <td class="d-flex flex-column"><span class="red">$21.40</span>
-                                <del class="cross">$30.00</del>
-                            </td>
-                            <td class="font-weight-bold">
-                                $249
-                                <div class="close">&times;</div>
-                                <button class="d-flex justify-content-end btn border">+ Add to cart</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="item">
-                                <div class="d-flex align-items-start">
-                                    <img src="https://www.freepnglogos.com/uploads/corona-png-logo/corona-bottle-transparent-png-logo-27.png"
-                                        alt="">
-                                    <div>
-                                        Wine Bottle Shaped in Gift Base
-                                        <div class="text-uppercase new"><span class="fas fa-star"></span>new</div>
-                                        <div>
-                                            <a href="#">
-                                                <span class="red text-uppercase">
-                                                    <span class="fas fa-comment pr-1"></span>
-                                                    add a comment
-                                                </span>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>120</td>
-                            <td class="d-flex flex-column">$21.40
-                            </td>
-                            <td class="font-weight-bold">
-                                $249
-                                <div class="close">&times;</div>
-                                <button class="d-flex justify-content-end align-items-end btn border">+ Add to
-                                    cart</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="item">
-                                <div class="d-flex align-items-start">
-                                    <img src="https://www.freepnglogos.com/uploads/corona-png-logo/corona-bottle-transparent-png-logo-27.png"
-                                        alt="">
-                                    <div>
-                                        Copper Moscow Mug
-                                        <div class="text-uppercase new"><span class="fas fa-star"></span>new</div>
-                                        <div class="d-flex flex-column justify-content-center">
-                                            <div class="text-muted">Blue/Mute</div>
-                                            <div><a href="#"><span class="red text-uppercase"><span
-                                                            class="fas fa-comment pr-1"></span>add a comment</span></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>120</td>
-                            <td class="d-flex flex-column">$21.40
-                            </td>
-                            <td class="font-weight-bold">
-                                $249
-                                <div class="close">&times;</div>
-                                <button class="d-flex justify-content-end btn border">+ Add to cart</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="item">
-                                <div class="d-flex align-items-start">
-                                    <img src="https://www.freepnglogos.com/uploads/corona-png-logo/corona-bottle-transparent-png-logo-27.png"
-                                        alt="">
-                                    <div>
-                                        Wine Bottle Shaped in Gift Base
-                                        <div class="d-md-flex align-items-md-center">
-                                            <div class="editors">
-                                                <img src="https://images.unsplash.com/photo-1509967419530-da38b4704bc6?ixid=MXwxMjA3fDB8MHxzZWFyY2h8NXx8ZmFjZXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                                                    id="commentor1" alt="">
-                                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MXx8ZmFjZXxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
-                                                    id="commentor2" alt="">
-                                                <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80"
-                                                    id="commentor3" alt="">
-                                            </div>
-                                            <div class="text-muted pl-md-5">
-                                                <span class="fas fa-comment"></span>
-                                                <a href="#" class="comments text-muted">
-                                                    + 7 comments
-                                                </a>
-                                            </div>
-                                        </div>
-                                        <div><a href="#"><span class="red text-uppercase"><span
-                                                        class="fas fa-comment pr-1"></span>add a comment</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>120</td>
-                            <td class="d-flex flex-column">$21.40
-                            </td>
-                            <td class="font-weight-bold">
-                                $249
-                                <div class="close">&times;</div>
-                                <button class="d-flex justify-content-end btn border">+ Add to cart</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
             <hr class="items">
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                         <tr>
-                            <th scope="col" class="text-uppercase header">item</th>
+                            <th scope="col" class="text-uppercase">Cloud Provider</th>
+                            <th scope="col" class="text-uppercase">Region</th>
+                            <th scope="col" class="text-uppercase">CPU</th>
+                            <th scope="col" class="text-uppercase">Memory</th>
+                            <th scope="col" class="text-uppercase">Disk</th>
                             <th scope="col" class="text-uppercase">Quantity</th>
-                            <th scope="col" class="text-uppercase">price each</th>
-                            <th scope="col" class="text-uppercase">total</th>
+                            <th scope="col" class="text-uppercase">Price</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td class="item">
-                                <div class="d-flex align-items-start">
-                                    <img src="https://www.freepnglogos.com/uploads/corona-png-logo/corona-bottle-transparent-png-logo-27.png"
-                                        alt="">
-                                    <div>
-                                        Wine Bottle Shaped in Gift Base
-                                        <div class="text-uppercase new"><span class="fas fa-star"></span>new</div>
-                                        <div><a href="#"><span class="red text-uppercase"><span
-                                                        class="fas fa-comment pr-1"></span>add a comment</span></a>
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>120</td>
-                            <td class="d-flex flex-column">$21.40
-                            </td>
-                            <td class="font-weight-bold">
-                                $249
-                                <div class="close">&times;</div>
-                                <button class="d-flex justify-content-end align-items-end btn border">+ Add to
-                                    cart</button>
-                            </td>
-                        </tr>
+                    <tbody id="carts">
                     </tbody>
                 </table>
             </div>
@@ -202,15 +51,73 @@
             <div class="d-flex flex-column justify-content-start align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 counttotal">
                     <div class="px-4">Items</div>
-                    <div class="h5 font-weight-bold px-md-2">1</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-count">1</div>
                 </div>
             </div>
             <div class="d-flex flex-column justify-content-end align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Subtotal</div>
-                    <div class="h5 font-weight-bold px-md-2">$1,340</div>
+                    <div class="px-4">Total</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-price">$1,340</div>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="modal fade" id="cart-modal">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 class="modal-title" id="modal-title">Cart</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+              <div>
+                <div class="modal-input">
+                    <label>Cloud Provider</label>
+                    <select class="form-control" id="cloud" onchange="changedInput('cloud');"></select>
+                </div>
+                <div class="input-error" id="cloud-error">* Select Cloud Provider.</div>
+                <div class="modal-input">
+                    <label>VM Size</label>
+                    <select class="form-control" id="size" onchange="changedInput('size');"></select>
+                </div>
+                <div class="input-error" id="size-error">* Select VM Size.</div>
+                <div class="modal-input">
+                    <label>CPU</label>
+                    <select class="form-control" id="cpu" onchange="changedInput('cpu');"></select>
+                </div>
+                <div class="input-error" id="cpu-error">* Select CPU.</div>
+                <div class="modal-input">
+                    <label>Memory</label>
+                    <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
+                </div>
+                <div class="input-error" id="memory-error">* Select Memory.</div>
+                <div class="modal-input">
+                    <label>Disk</label>
+                    <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
+                </div>
+                <div class="input-error" id="disk-error">* Select Disk.</div>
+                <hr>
+                <div class="modal-input" onchange="changedInput('region');">
+                    <label>Region</label>
+                    <select class="form-control" id="region"></select>
+                </div>
+                <div class="input-error" id="region-error">* Select Region.</div>
+                <hr>
+                <div class="modal-input">
+                    <label>VM Count</label>
+                    <input type="number" value="1" class="form-control" min="1" step="1" id="count" onchange="changedInput('count')" />
+                </div>
+                <div class="input-error" id="count-error">* Input correct count.</div>
+              </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <div class="font-weight-bold" id="price">$ 1000</div>
+                <div>
+                    <button type="button" class="btn btn-info" id="modal-btn">Add Cart</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+          </div>
         </div>
     </div>
 <script src="script.js"></script>

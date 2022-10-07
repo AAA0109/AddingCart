@@ -7,6 +7,17 @@
 body{
     background-color: #f4f4f4;
 }
+.background-mask {
+    position: fixed;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url(./img/background.jpg);
+    background-size: cover;
+    opacity: 0.03;
+}
 .wrapper{
     max-width: 900px;
     margin: 20px auto;
@@ -20,12 +31,12 @@ div.text-uppercase{
     font-weight: 600;
     letter-spacing: 0.1rem;
 }
-.btn#sub{
+.btn#add-cart{
     font-size: 0.8rem;
     font-weight: 700;
     border: 1px solid #ddd;
 }
-.btn#sub:hover{
+.btn#add-cart:hover{
     background-color: #333;
     color: #FFF;
     border: 1ps solid #333;
@@ -34,64 +45,19 @@ div.text-uppercase{
     color: #a8a8a8;
     font-size: 0.8rem;
 }
-.ml-auto.btn:hover span{
-    color: #333;
-}
 div.btn{
     padding: 8px 20px;
 }
-.notification{
-    background-color: #54e346;
-    padding: 0px 10px;
-}
-.notification button.btn{
-    background-color: inherit;
-    box-shadow: none;
-}
-.close{
+.cart-remove{
     font-size: 1rem;
     font-weight: normal;
     opacity: 1;
 }
-.close:hover{
+.cart-remove:hover{
     color: #EEE;
-}
-.alert-dismissible .close{
-    position: unset;
-}
-button:focus{
-    outline: none;
 }
 .h4{
     margin: 0;
-}
-.editors{
-    position: relative;
-}
-.editors img{
-    object-fit: cover;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 5px solid #FFF;
-}
-#img1,#img2,#img3{
-    position: absolute;
-}
-#img1{
-    top: -15px;
-    left: -50px;
-}
-#img2{
-    top: -15px;
-    left: -70px;
-}
-#img3{
-    top: -15px;
-    left: -90px;
-}
-div.text-muted{
-    font-size: 0.9rem;
 }
 .table{
     overflow: hidden;
@@ -104,6 +70,17 @@ div.text-muted{
 .table tr th{
     border: none;
     text-align: center;
+}
+.table tr td:not(.item) {
+    padding-top: 20px;
+}
+.item-cloud {
+    padding-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
+    margin-left: 15px;
 }
 .table.activitites thead{
     border-bottom: 1px solid #54e346;
@@ -134,9 +111,6 @@ div.text-muted{
     font-weight: 900;
     text-align: left;
 }
-del{
-    font-size: 0.85rem;
-}
 .red{
     color: #ff0000;
 }
@@ -150,8 +124,8 @@ div.new{
     display: inline-block;
 }
 .table tbody td.item img{
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
 }
 .table thead th.header{
@@ -166,8 +140,7 @@ div.new{
 .table tbody tr:last-child{
     border: none;
 }
-td .close,
-td .btn{
+td .cart-remove {
     opacity: 0;
     background: #fff;
     font-weight: 600;
@@ -180,17 +153,13 @@ td .btn{
     overflow: hidden;
     scroll-behavior: unset;
 }
-.table tbody tr:hover .close{
+.table tbody tr:hover .cart-remove{
     font-size: 1.5rem;
+    line-height: 0.9;
     opacity: 1;
 }
-.table tbody tr:hover .close:hover{
+.table tbody tr:hover .cart-remove:hover{
     color: #aaa;
-}
-.table tbody tr:hover .btn{
-    border: 1px solid #ddd;
-    opacity: 1;
-    background: #fff;
 }
 a{
     font-size: 0.8rem;
@@ -249,13 +218,32 @@ hr.items:after{
 .tag,.fa-shoppping-cart{
     font-size: 0.5rem;
 }
-button.btn{
-    background-color: inherit;
+
+.modal-input {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
 }
-button.btn:hover{
-    background-color: #cecccc;
-    box-shadow: none;
-    outline: none;
+.modal-input label {
+    width: 150px;
+    margin-bottom: 0;
+}
+.modal-input .form-control {
+    width: 1px;
+    flex-grow: 1;
+}
+.input-error {
+    color: #dc3545;
+    margin-left: 150px;
+    font-size: 12px;
+    display: none;
+}
+.input-error.show {
+    display: block;
+}
+
+.banner img {
+    width: 100%;
 }
 @media(max-width:760px){
     .table.activitites thead::after{
@@ -266,29 +254,9 @@ button.btn:hover{
     .table.activitites thead::after{
         top: 55px;
     }
-    #img1{
-        top: -8px;
-        left: 0px;
-    }
-    #img2{
-        top: -8px;
-        left: 15px;
-    }
-    #img3{
-        top: -8px;
-        left: 30px;
-    }
-    .editors img{
-        width: 20px;
-        height: 20px;
-        border: 1px solid #FFF;
-    }
 }
 @media(max-width:400px){
-    .notification{
-        font-size: 0.7rem;
-    }
-    .close{
+    .cart-remove{
         font-size: 0.7rem;
         font-weight: normal;
         opacity: 1;
