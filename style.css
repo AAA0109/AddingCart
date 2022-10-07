@@ -3,6 +3,7 @@
     padding: 0;
     margin: 0;
     box-sizing: border-box;
+    user-select: none;
 }
 body{
     background-color: #f4f4f4;
@@ -51,14 +52,6 @@ div.text-uppercase{
 div.btn{
     padding: 8px 20px;
 }
-.cart-remove{
-    font-size: 1rem;
-    font-weight: normal;
-    opacity: 1;
-}
-.cart-remove:hover{
-    color: #EEE;
-}
 .h4{
     margin: 0;
 }
@@ -78,7 +71,7 @@ div.btn{
     padding-top: 20px;
 }
 .item-cloud {
-    padding-top: 8px;
+    padding-top: 6px;
     display: flex;
     align-items: center;
     white-space: nowrap;
@@ -141,12 +134,6 @@ div.new{
 .table tbody tr:last-child{
     border: none;
 }
-td .cart-remove {
-    opacity: 0;
-    background: #fff;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
 .table tbody tr:hover{
     transform: scale(1.004);
     box-shadow: 2px 2px 10px #a5a5a5;
@@ -154,12 +141,23 @@ td .cart-remove {
     overflow: hidden;
     scroll-behavior: unset;
 }
-.table tbody tr:hover .cart-remove{
+.table td.close-container {
+    position: relative;
+    padding-right: 30px;
+    text-align: right;
+}
+.cart-remove{
     font-size: 1.5rem;
     line-height: 0.9;
-    opacity: 1;
+    position: absolute;
+    right: 10px;
+    top: 20px;
+    display: none;
 }
-.table tbody tr:hover .cart-remove:hover{
+.table tbody tr:hover .cart-remove{
+    display: block;
+}
+.cart-remove:hover{
     color: #aaa;
 }
 a{
@@ -226,7 +224,7 @@ hr.items:after{
     margin-top: 10px;
 }
 .modal-input label {
-    width: 150px;
+    width: 130px;
     margin-bottom: 0;
 }
 .modal-input .form-control {
@@ -250,8 +248,27 @@ hr.items:after{
 
 .banner img {
     width: 100%;
-
 }
+
+.decrease-count, .increase-count {
+    background-color: rgb(240, 240, 240);
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    font-size: 20px;
+    line-height: 20px;
+    font-weight: bold;
+}
+.decrease-count {
+    color: green;
+}
+.increase-count {
+    color:darkcyan;
+}
+.count {
+    margin: 0 5px;
+}
+
 @media(max-width:760px){
     .table.activitites thead::after{
         top: 35px;
@@ -263,11 +280,6 @@ hr.items:after{
     }
 }
 @media(max-width:400px){
-    .cart-remove{
-        font-size: 0.7rem;
-        font-weight: normal;
-        opacity: 1;
-    }
     .wrapper{
         padding: 10px;
     }

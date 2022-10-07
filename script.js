@@ -55,11 +55,19 @@ var vmObject = [{
         "Disk": ["50GB", "100GB", "200GB"]
     }
 }];
+var clouds = ['AWS', 'Azure', 'Onprem'];
+var sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large'];
 var regions = ['West', 'East']
 
-var carts = [];
+var carts = [{
+    cloud: 'AWS',
+    size: 'Medium',
+    region: '',
+    count: 5,
+    cpu: '50GB',
+    memory: '1TB'
+}];
 var cartId = 1;
-var selectedId = -1;
 
 function getCloudTypes () {
     const items = vmObject.map(itm => itm.cloud);
@@ -103,18 +111,13 @@ function initRegion() {
 }
 
 function initCloudSelect () {
-    const clouds = getCloudTypes();
     let html = '<option value="">Select Cloud Provider</option>' + generateOptionHTML(clouds);
     $('#cloud').html(html);
 }
 
 function initVMSize () {
-    const cloud = $('#cloud').val();
-    const VMSizes = getVMSizes(cloud);
-    let html = '<option value="">Select VM Size</option>' + generateOptionHTML(VMSizes);
+    let html = '<option value="">Select VM Size</option>' + generateOptionHTML(sizes);
     $('#size').html(html);
-
-    initComponents();
 }
 
 function initRegionActive() {
@@ -191,8 +194,8 @@ function changedInput(type) {
 
     switch (type) {
         case 'cloud':
-            initVMSize();
             initRegionActive();
+            initComponents();
             break;
         case 'size':
             initComponents();
@@ -201,40 +204,14 @@ function changedInput(type) {
     updatePrice();
 }
 
-function openModal(type, id) {
-    if (type === 'add') {
-        $('#modal-btn').html('Add Cart');        
-    } else {
-        const cart = carts.find(itm => itm.id == id);
-        if (!cart) return;
-        selectedId = id;
-
-        $('#cloud').val(cart.cloud);
-        initVMSize();
-        initRegionActive();
-        $('#size').val(cart.size);
-        initComponents();
-        $('#cpu').val(cart.cpu);
-        $('#memory').val(cart.memory);
-        $('#disk').val(cart.disk);
-        $('#quantity').val(cart.quantity);
-        $('#count').val(cart.count);
-        $('#region').val(cart.region);
-        updatePrice();
-
-        $('#modal-btn').html('Update Cart');
-    }
-    $('#cart-modal').modal();
-}
-
 function updateCarts() {
     let html = '';
     for(let i = 0; i < carts.length; i ++) {
         const cart = carts[i];
-        html += `<tr onclick="openModal('edit', ${cart.id})">
+        html += `<tr class="cart-item">
         <td class="item">
             <div class="d-flex align-items-start">
-                <img src="./img/itm.webp" alt="">
+                <img src="./img/${cart.cloud}.png" alt="">
                 <div class="item-cloud">
                     ${cart.cloud}
                 </div>
@@ -245,8 +222,14 @@ function updateCarts() {
         <td>${cart.cpu}</td>
         <td>${cart.memory}</td>
         <td>${cart.disk}</td>
-        <td>${cart.count}</td>
-        <td class="font-weight-bold">
+        <td>
+            <div class="d-flex align-items-start justify-content-center">
+                <div class="decrease-count" onclick="decreaseCount(${cart.id})">-</div>
+                <div class="count">${cart.count}</div>
+                <div class="increase-count" onclick="increaseCount(${cart.id})">+</div>
+            </div>
+        </td>
+        <td class="font-weight-bold close-container">
             $${cart.price}
             <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
@@ -267,38 +250,48 @@ function removeCart(id) {
     return false;
 }
 
+function increaseCount(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx === -1) return -1;
+    carts[idx].count ++;
+    carts[idx].price = getPrice(carts[idx]);
+    updateCarts();
+    return false;
+}
+
+function decreaseCount(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx === -1 || carts[idx].count <= 0) return -1;
+    carts[idx].count --;
+    carts[idx].price = getPrice(carts[idx]);
+    updateCarts();
+    return false;
+}
+
 function modalBtnClicked() {
-    const label = $('#modal-btn').html();
     const info = getSelectedObject();
     if (!validateInfo(info, true)) return;
     const price = getPrice(info);
-    if (label === 'Add Cart') {
-        carts.push({
-            id: cartId ++,
-            price,
-            ...info
-        });
-    } else {
-        const idx = carts.findIndex(itm => itm.id == selectedId);
-        if (idx > -1) {
-            carts[idx] = {
-                ...carts[idx],
-                price,
-                ...info
-            }
-        }
-    }
+    
+    carts.push({
+        id: cartId ++,
+        price,
+        ...info
+    });
+
     updateCarts();
     $('#cart-modal').modal('hide');
 }
 
 $(function() {
     $('#add-cart').click(() => openModal('add'));
-    $('#modal-btn').click(() => modalBtnClicked());
+    $('#add-btn').click(() => modalBtnClicked());
 
     initRegion();
     initCloudSelect();
     initVMSize();
+    initComponents();
+
     updatePrice();
     updateCarts();
 })

@@ -18,16 +18,73 @@
     </div>
     <div class="wrapper">
         <div class="h3">VM Cost Estimator</div>
-        <hr>
-        <div class="d-flex align-items-center justify-content-between">
-            <div class="d-flex flex-column">
-                <div class="h3">Shopping Cart</div>
-                <div class="text-uppercase">6 items</div>
+        <div>
+            <hr>
+            <div class="row justify-content-between">
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Cloud Provider</label>
+                        <select class="form-control" id="cloud" onchange="changedInput('cloud');"></select>
+                    </div>
+                    <div class="input-error" id="cloud-error">* Select Cloud Provider.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>VM Size</label>
+                        <select class="form-control" id="size" onchange="changedInput('size');"></select>
+                    </div>
+                    <div class="input-error" id="size-error">* Select VM Size.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>CPU</label>
+                        <select class="form-control" id="cpu" onchange="changedInput('cpu');"></select>
+                    </div>
+                    <div class="input-error" id="cpu-error">* Select CPU.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Memory</label>
+                        <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
+                    </div>
+                    <div class="input-error" id="memory-error">* Select Memory.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Disk</label>
+                        <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
+                    </div>
+                    <div class="input-error" id="disk-error">* Select Disk.</div>
+                </div>
+                <hr>
             </div>
-            <div class="btn" id="add-cart">
-                + Add Cart
+            <hr>
+            <div class="row justify-content-between">
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('region');">
+                        <label>Region</label>
+                        <select class="form-control" id="region"></select>
+                    </div>
+                    <div class="input-error" id="region-error">* Select Region.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>VM Count</label>
+                        <input type="number" value="1" class="form-control" min="1" step="1" id="count" onchange="changedInput('count')" />
+                    </div>
+                    <div class="input-error" id="count-error">* Input correct count.</div>
+                </div>
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <div class="modal-input">
+                    <label>Sub Total</label>
+                    <div class="font-weight-bold" id="price">$ 1000</div>
+                </div>
+                <button type="button" class="btn btn-info" id="add-btn">Add Cart</button>
             </div>
         </div>
+        <div class="h3 mt-5">Shopping Cart</div>
         <div id="table" class="bg-white rounded">
             <hr>
             <hr class="items">
@@ -63,64 +120,6 @@
                     <div class="h5 font-weight-bold px-md-2" id="total-price">$1,340</div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="modal fade" id="cart-modal">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title" id="modal-title">Cart</h4>
-              <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-            <div class="modal-body">
-              <div>
-                <div class="modal-input">
-                    <label>Cloud Provider</label>
-                    <select class="form-control" id="cloud" onchange="changedInput('cloud');"></select>
-                </div>
-                <div class="input-error" id="cloud-error">* Select Cloud Provider.</div>
-                <div class="modal-input">
-                    <label>VM Size</label>
-                    <select class="form-control" id="size" onchange="changedInput('size');"></select>
-                </div>
-                <div class="input-error" id="size-error">* Select VM Size.</div>
-                <div class="modal-input">
-                    <label>CPU</label>
-                    <select class="form-control" id="cpu" onchange="changedInput('cpu');"></select>
-                </div>
-                <div class="input-error" id="cpu-error">* Select CPU.</div>
-                <div class="modal-input">
-                    <label>Memory</label>
-                    <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
-                </div>
-                <div class="input-error" id="memory-error">* Select Memory.</div>
-                <div class="modal-input">
-                    <label>Disk</label>
-                    <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
-                </div>
-                <div class="input-error" id="disk-error">* Select Disk.</div>
-                <hr>
-                <div class="modal-input" onchange="changedInput('region');">
-                    <label>Region</label>
-                    <select class="form-control" id="region"></select>
-                </div>
-                <div class="input-error" id="region-error">* Select Region.</div>
-                <hr>
-                <div class="modal-input">
-                    <label>VM Count</label>
-                    <input type="number" value="1" class="form-control" min="1" step="1" id="count" onchange="changedInput('count')" />
-                </div>
-                <div class="input-error" id="count-error">* Input correct count.</div>
-              </div>
-            </div>
-            <div class="modal-footer d-flex justify-content-between">
-                <div class="font-weight-bold" id="price">$ 1000</div>
-                <div>
-                    <button type="button" class="btn btn-info" id="modal-btn">Add Cart</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                </div>
-            </div>
-          </div>
         </div>
     </div>
 <script src="script.js"></script>
