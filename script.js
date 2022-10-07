@@ -1,26 +1,337 @@
-var vmObject=[{cloud:"AWS",size:"Small",types:{CPU:["1CPU"],Memory:[".5GB","1GB","3.5GB"],Disk:["50GB","100GB","200GB"]}},{cloud:"AWS",size:"Small",types:{CPU:["1CPU"],Memory:[".5GB","1GB","3.5GB"],Disk:["50GB","100GB","200GB"]}},{cloud:"AWS",size:"Medium",types:{CPU:["1CPU"],Memory:["8GB","16GB"],Disk:["50GB","100GB","200GB"]}},{cloud:"AWS",size:"Large",types:{CPU:["1CPU"],Memory:["7GB","8GB","14GB","16GB","28GB"],Disk:["50GB","100GB","200GB"]}},{cloud:"Azure",size:"X-Large",types:{CPU:["1CPU"],Memory:[".5GB","1GB","3.5GB"],Disk:["50GB","100GB","200GB"]}},{cloud:"Azure",size:"XX-Large",types:{CPU:["1CPU"],Memory:[".5GB","1GB","3.5GB"],Disk:["50GB","100GB","200GB"]}},{cloud:"Onprem",size:"X-Large",types:{CPU:["1CPU"],Memory:["5GB","10GB","13.5GB"],Disk:["50GB","100GB","200GB"]}}],clouds=["AWS","Azure","Onprem"],sizes=["Small","Medium","Large","X-Large","XX-Large"],regions=["West","East"],carts=[],cartId=1;function getCloudTypes(){let e=vmObject.map(e=>e.cloud);return[...new Set(e)]}function getVMSizes(e){let t=vmObject.filter(t=>t.cloud===e).map(e=>e.size);return[...new Set(t)]}function getVMObject(e,t){return vmObject.find(i=>i.cloud===e&&i.size===t)}function generateOptionHTML(e){let t="";if(!e)return t;for(let i=0;i<e.length;i++){let o=e[i];t+=`<option value="${o}">${o}</option>`}return t}function getSelectedObject(){let e=$("#cloud").val(),t=$("#size").val(),i=$("#region").val(),o=parseInt($("#count").val()),n=$("#cpu").val(),r=$("#memory").val(),c=$("#disk").val();return{cloud:e,size:t,count:o,cpu:n,memory:r,disk:c,region:i}}function initRegion(){let e='<option value="">Select Region</option>'+generateOptionHTML(regions);$("#region").html(e)}function initCloudSelect(){let e='<option value="">Select Cloud Provider</option>'+generateOptionHTML(clouds);$("#cloud").html(e)}function initVMSize(){let e='<option value="">Select VM Size</option>'+generateOptionHTML(sizes);$("#size").html(e)}function initRegionActive(){let e=$("#cloud").val();"onprem"===e.toLocaleLowerCase()?($("#region").val(""),$("#region").attr("disabled",!0)):$("#region").attr("disabled",!1)}function initComponents(){let e=$("#cloud").val(),t=$("#size").val(),i=["CPU","Memory","Disk"];["cpu","memory","disk"].forEach((o,n)=>{let r=`<option value="">Select ${i[n]}</option>`,c=getVMObject(e,t);if(c){let l=c.types[i[n]];r+=generateOptionHTML(l)}$(`#${o}`).html(r)})}function validateInfo(e,t=!1){let i=["cloud","size","memory","disk","cpu","count","region"],o=!0;for(let n=0;n<i.length;n++){let r=i[n];if("region"===r&&"onprem"===e.cloud.toLocaleLowerCase()){$("#"+r+"-error").removeClass("show");continue}"count"!==r&&e[r]||"count"===r&&e[r]>0?$("#"+r+"-error").removeClass("show"):(t&&$("#"+r+"-error").addClass("show"),o=!1)}return o}function getPrice(e){let t=0;if(validateInfo(e)){let i=regions.indexOf(e.region),o=parseInt(e.cpu)||0,n=parseInt(e.memory)||0,r=parseInt(e.disk)||0;t=(200*o+20*n+3*r)*(i+2)*e.count}return t}function updatePrice(){let e=getSelectedObject(),t=getPrice(e);$("#price").html("$"+t)}function changedInput(e){let t=$("#"+e).val();switch(t?$("#"+e+"-error").removeClass("show"):$("#"+e+"-error").addClass("show"),e){case"cloud":initRegionActive(),initComponents();break;case"size":initComponents()}updatePrice()}function updateCarts(){let e="";for(let t=0;t<carts.length;t++){let i=carts[t];e+=`<tr class="cart-item">
+// var vmObject = [{
+//     cloud: "AWS",
+//     size: "Small",
+//     types: {
+//         "CPU": ["1CPU"],
+//         "Memory": [".5GB", "1GB", "3.5GB"],
+//         "Disk": ["50GB", "100GB", "200GB"]
+//     }
+// }, {
+//     cloud: "AWS",
+//     size: "Small",
+//     types: {
+//         "CPU": ["1CPU"],
+//         "Memory": [".5GB", "1GB", "3.5GB"],
+//         "Disk": ["50GB", "100GB", "200GB"]
+//     }
+// }, {
+//     cloud: "AWS",
+//     size: "Medium",
+//     types: {
+//         "CPU": ["1CPU"],
+//         "Memory": ["8GB", "16GB"],
+//         "Disk": ["50GB", "100GB", "200GB"]
+//     }
+// }, {
+//     cloud: "AWS",
+//     size: "Large",
+//     types: {
+//         "CPU": ["1CPU"],
+//         "Memory": ["7GB", "8GB", "14GB", "16GB", "28GB"],
+//         "Disk": ["50GB", "100GB", "200GB"]
+//     }
+// }, {
+//     cloud: "Azure",
+//     size: "X-Large",
+//     types: {
+//         "CPU": ["1CPU"],
+//         "Memory": [".5GB", "1GB", "3.5GB"],
+//         "Disk": ["50GB", "100GB", "200GB"]
+//     }
+// }, {
+//     cloud: "Azure",
+//     size: "XX-Large",
+//     types: {
+//         "CPU": ["1CPU"],
+//         "Memory": [".5GB", "1GB", "3.5GB"],
+//         "Disk": ["50GB", "100GB", "200GB"]
+//     }
+// }, {
+//     cloud: "Onprem",
+//     size: "X-Large",
+//     types: {
+//         "CPU": ["1CPU"],
+//         "Memory": ["5GB", "10GB", "13.5GB"],
+//         "Disk": ["50GB", "100GB", "200GB"]
+//     }
+// }];
+var vmObject = {
+    "Small": {
+        "CPU": ["1CPU"],
+        "Memory": [".5GB", "1GB", "3.5GB"],
+        "Disk": ["50GB", "100GB", "200GB"]
+    },
+
+    "Medium": {
+        "CPU": ["2CPU"],
+        "Memory": ["8GB", "16GB"],
+        "Disk": ["50GB", "100GB", "200GB"]
+    },
+
+    "Large": {
+        "CPU": ["4CPU"],
+        "Memory": ["7GB", "8GB", "14GB", "16GB", "28GB"],
+        "Disk": ["50GB", "100GB", "200GB"]  
+    },
+    
+    "X-Large": {
+        "CPU": ["8CPU"],
+        "Memory": ["16GB", "28GB", "32GB", "64GB"],
+        "Disk": ["50GB", "100GB", "200GB"]
+      },
+
+    "XX-Large": {
+      "CPU": ["16CPU"],
+      "Memory": ["32GB", "64GB"],
+      "Disk": ["50GB", "100GB", "200GB"]
+    }
+}
+var prices = {
+    "AWS": [{
+        cpu: 5000,
+        memory: 300,
+        disk: 20
+    }, {
+        cpu: 8000,
+        memory: 500,
+        disk: 40
+    }],
+    "Azure": [{
+        cpu: 3500,
+        memory: 250,
+        disk: 15
+    }, {
+        cpu: 6000,
+        memory: 400,
+        disk: 20
+    }],
+    "Onprem": [{
+        cpu: 12000,
+        memory: 1100,
+        disk: 70
+    }]
+}
+var clouds = ['AWS', 'Azure', 'Onprem'];
+var sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large'];
+var regions = ['West', 'East'];
+
+var carts = [];
+var cartId = 1;
+
+function getVMObject (size) {
+    return vmObject[size];
+}
+
+function generateOptionHTML(items) {
+    let html = '';
+    if (!items) return html;
+    for (let i = 0; i < items.length; i ++) {
+        const itm = items[i];
+        html += `<option value="${itm}">${itm}</option>`
+    }
+    return html;
+}
+
+function getSelectedObject() {
+    const cloud = $('#cloud').val();
+    const size = $('#size').val();
+    const region = $('#region').val();
+    const count = parseInt($('#count').val());
+    const cpu = $('#cpu').val();
+    const memory = $('#memory').val();
+    const disk = $('#disk').val();
+
+    return { cloud, size, count, cpu, memory, disk, region };
+}
+
+function initRegion() {
+    let html = '<option value="">Select Region</option>' + generateOptionHTML(regions);
+    $('#region').html(html);
+}
+
+function initCloudSelect () {
+    let html = '<option value="">Select Cloud Provider</option>' + generateOptionHTML(clouds);
+    $('#cloud').html(html);
+}
+
+function initVMSize () {
+    let html = '<option value="">Select VM Size</option>' + generateOptionHTML(sizes);
+    $('#size').html(html);
+}
+
+function initRegionActive() {
+    const cloud = $('#cloud').val();
+    if (cloud.toLocaleLowerCase() === 'onprem') {
+        $('#region').val('');
+        $('#region').attr('disabled', true);
+    } else {
+        $('#region').attr('disabled', false);
+    }
+}
+
+function initComponents () {
+    const cloud = $('#cloud').val(), size = $('#size').val();
+    const keys = ['cpu', 'memory', 'disk']
+    const labels = ['CPU', 'Memory', 'Disk']
+    keys.forEach((key, idx) => {
+        let html = `<option value="">Select ${labels[idx]}</option>`
+        const obj = getVMObject(size);
+        if (obj) {
+            const items = obj[labels[idx]];
+            html += generateOptionHTML(items);
+        }        
+        $(`#${key}`).html(html);
+    })
+}
+
+function validateInfo (info, show_error = false) {
+    const keys = ['cloud', 'size', 'memory', 'disk', 'cpu', 'count', 'region'];
+    let flag = true;
+    for (let i = 0; i < keys.length; i ++) {
+        const key = keys[i];
+        if (key === 'region') {
+            if (info.cloud.toLocaleLowerCase() === 'onprem') {
+                $('#' + key + '-error').removeClass('show');
+                continue;
+            }
+        }
+        if((key !== 'count' && info[key]) || (key === 'count' && info[key] > 0)) {
+            $('#' + key + '-error').removeClass('show');
+        }
+        else {
+            if(show_error)
+                $('#' + key + '-error').addClass('show');
+            flag = false;
+        }
+    }
+    return flag;
+}
+
+function getPrice(info) {
+    let price = 0;
+    
+    if (validateInfo(info)) {
+        let idx = regions.indexOf(info.region);
+        if(idx === -1) idx = 0;
+        const cloud = info.cloud;
+        const cpu = parseFloat(info.cpu) || 0;
+        const memory = parseFloat(info.memory) || 0;
+        const disk = parseFloat(info.disk) || 0;
+        price = ((cpu * prices[cloud][idx].cpu) + (memory * prices[cloud][idx].memory) + (disk * prices[cloud][idx].disk)) * info.count;
+    }
+    return price;
+}
+
+function updatePrice () {
+    const info = getSelectedObject();
+    const price = getPrice(info);
+    $('#price').html('$' + price);
+}
+
+function changedInput(type) {
+    const value = $('#' + type).val();
+    if (!value) $('#' + type + '-error').addClass('show');
+    else $('#' + type + '-error').removeClass('show');
+
+    switch (type) {
+        case 'cloud':
+            initRegionActive();
+            break;
+        case 'size':
+            initComponents();
+            break;
+    }
+    updatePrice();
+}
+
+function updateCarts() {
+    let html = '';
+    for(let i = 0; i < carts.length; i ++) {
+        const cart = carts[i];
+        html += `<tr class="cart-item">
         <td class="item">
             <div class="d-flex align-items-start">
-                <img src="./img/${i.cloud}.png" alt="">
+                <img src="./img/${cart.cloud}.png" alt="">
                 <div class="item-cloud">
-                    ${i.cloud}
+                    ${cart.cloud}
                 </div>
             </div>
         </td>
-        <td>${i.size}</td>
-        <td>${i.region}</td>
-        <td>${i.cpu}</td>
-        <td>${i.memory}</td>
-        <td>${i.disk}</td>
+        <td>${cart.size}</td>
+        <td>${cart.region}</td>
+        <td>${cart.cpu}</td>
+        <td>${cart.memory}</td>
+        <td>${cart.disk}</td>
         <td>
             <div class="d-flex align-items-start justify-content-center">
-                <div class="decrease-count" onclick="decreaseCount(${i.id})">-</div>
-                <div class="count">${i.count}</div>
-                <div class="increase-count" onclick="increaseCount(${i.id})">+</div>
+                <div class="decrease-count" onclick="decreaseCount(${cart.id})">-</div>
+                <div class="count">${cart.count}</div>
+                <div class="increase-count" onclick="increaseCount(${cart.id})">+</div>
             </div>
         </td>
         <td class="font-weight-bold close-container">
-            $${i.price}
-            <div class="cart-remove close" onclick="removeCart(${i.id})">&times;</div>
+            $${cart.price}
+            <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
-    </tr>`}carts.length||(e='<tr><td colspan=7><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'),$("#carts").html(e),$("#total-count").html(carts.length),$("#total-price").html("$"+carts.reduce((e,t)=>e+t.price,0))}function removeCart(e){let t=carts.findIndex(t=>t.id==e);return t>-1&&carts.splice(t,1),updateCarts(),!1}function increaseCount(e){let t=carts.findIndex(t=>t.id==e);return -1===t?-1:(carts[t].count++,carts[t].price=getPrice(carts[t]),updateCarts(),!1)}function decreaseCount(e){let t=carts.findIndex(t=>t.id==e);return -1===t||carts[t].count<=0?-1:(carts[t].count--,carts[t].price=getPrice(carts[t]),updateCarts(),!1)}function modalBtnClicked(){let e=getSelectedObject();if(!validateInfo(e,!0))return;let t=getPrice(e);carts.push({id:cartId++,price:t,...e}),updateCarts(),$("#cart-modal").modal("hide")}$(function(){$("#add-cart").click(()=>openModal("add")),$("#add-btn").click(()=>modalBtnClicked()),initRegion(),initCloudSelect(),initVMSize(),initComponents(),updatePrice(),updateCarts()});
+    </tr>`
+    }
+    if (!carts.length) {
+        html = '<tr><td colspan=7><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
+    }
+    $('#carts').html(html);
+    $('#total-count').html(carts.length);
+    $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price, 0));
+}
+
+function removeCart(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx > -1) carts.splice(idx, 1);
+    updateCarts();
+    return false;
+}
+
+function increaseCount(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx === -1) return -1;
+    carts[idx].count ++;
+    carts[idx].price = getPrice(carts[idx]);
+    updateCarts();
+    return false;
+}
+
+function decreaseCount(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx === -1 || carts[idx].count <= 0) return -1;
+    carts[idx].count --;
+    carts[idx].price = getPrice(carts[idx]);
+    updateCarts();
+    return false;
+}
+
+function modalBtnClicked() {
+    const info = getSelectedObject();
+    if (!validateInfo(info, true)) return;
+    const price = getPrice(info);
+    
+    carts.push({
+        id: cartId ++,
+        price,
+        ...info
+    });
+
+    updateCarts();
+    $('#cart-modal').modal('hide');
+}
+
+$(function() {
+    $('#add-cart').click(() => openModal('add'));
+    $('#add-btn').click(() => modalBtnClicked());
+
+    initRegion();
+    initCloudSelect();
+    initVMSize();
+    initComponents();
+
+    updatePrice();
+    updateCarts();
+})
