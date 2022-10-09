@@ -12,11 +12,17 @@
 </head>
 
 <body>
+    <!-- Backgruond Mask Begin -->
     <div class="background-mask"></div>
+    <!-- Background Mask End -->
+    <!-- Main Banner Begin -->
     <div class="banner">
         <img src="./img/banner.jpg" />
     </div>
+    <!-- Main Banner End -->
+    <!-- Main Content Begin -->
     <div class="wrapper">
+        <!-- Adding Cart Content Begin -->
         <div class="h3">VM Cost Estimator</div>
         <div>
             <hr>
@@ -84,6 +90,8 @@
                 <button type="button" class="btn btn-info" id="add-btn">Add Cart</button>
             </div>
         </div>
+        <!-- Adding Cart Content End -->
+        <!-- Shopping Cart Table Begin -->
         <div class="h3 mt-5">Shopping Cart</div>
         <div id="table" class="bg-white rounded">
             <hr>
@@ -102,7 +110,7 @@
                             <th scope="col" class="text-uppercase">Price</th>
                         </tr>
                     </thead>
-                    <tbody id="carts">
+                    <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
                     </tbody>
                 </table>
             </div>
@@ -121,7 +129,9 @@
                 </div>
             </div>
         </div>
+        <!-- Shopping Cart Table End -->
     </div>
+    <!-- Main Content End -->
 <script src="script.js"></script>
 </body>
 </html>

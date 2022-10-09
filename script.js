@@ -32,9 +32,6 @@ var vmObject = {
 }
 
 // Static Resource Prices per cloud provider and Region
-/*
-
-*/
 var prices = {
     "AWS": [{           // AWS-West Region
         cpu: 5000,
@@ -133,7 +130,10 @@ function initComponents () {
     const keys = ['cpu', 'memory', 'disk']
     const labels = ['CPU', 'Memory', 'Disk']
     keys.forEach((key, idx) => {
-        let html = `<option value="">Select ${labels[idx]}</option>`
+        let html;
+        if (size) html = `<option value="">Select ${labels[idx]}</option>`
+        else html = `<option value="">Please select VM size first</option>`
+
         const obj = getVMObject(size);
         if (obj) {
             const items = obj[labels[idx]];

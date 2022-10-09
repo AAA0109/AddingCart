@@ -242,12 +242,13 @@ hr.items:after{
 }
 
 .banner {
-    max-width: 900px;
+    /* max-width: 900px; */
     margin: auto;
 }
 
 .banner img {
     width: 100%;
+    height: 120px;
 }
 
 .decrease-count, .increase-count {
