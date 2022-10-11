@@ -131,11 +131,12 @@ function initComponents () {
     const labels = ['CPU', 'Memory', 'Disk']
     keys.forEach((key, idx) => {
         let html;
-        if (size) html = `<option value="">Select ${labels[idx]}</option>`
-        else html = `<option value="">Please select VM size first</option>`
+        if (!size) html = `<option value="">Please select VM size first</option>`
+        else if (!cloud) html = `<option value="">Please select Cloud Provider first</option>`
+        else html = `<option value="">Select ${labels[idx]}</option>`
 
         const obj = getVMObject(size);
-        if (obj) {
+        if (cloud && obj) {
             const items = obj[labels[idx]];
             html += generateOptionHTML(items);
         }        
@@ -201,6 +202,7 @@ function changedInput(type) {
     switch (type) {
         case 'cloud':
             initRegionActive();
+            initComponents();
             break;
         case 'size':
             initComponents();
