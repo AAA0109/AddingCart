@@ -43,17 +43,17 @@
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
-                        <label>CPU</label>
+                        <label>CPU:Memory</label>
                         <select class="form-control" id="cpu" onchange="changedInput('cpu');"></select>
                     </div>
                     <div class="input-error" id="cpu-error">* Select CPU.</div>
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
-                        <label>Memory</label>
-                        <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
+                        <label>Weekly</label>
+                        <input class="form-control" id="weekly" value="30" type="number" onchange="changedInput('weekly')"></input>
                     </div>
-                    <div class="input-error" id="memory-error">* Select Memory.</div>
+                    <div class="input-error" id="memory-error">* Select Weekly.</div>
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
@@ -62,7 +62,13 @@
                     </div>
                     <div class="input-error" id="disk-error">* Select Disk.</div>
                 </div>
-                <hr>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Year</label>
+                        <select class="form-control" id="year" onchange="changedInput('year');"></select>
+                    </div>
+                    <div class="input-error" id="year-error">* Select Year.</div>
+                </div>
             </div>
             <hr>
             <div class="row justify-content-between">
@@ -83,6 +89,10 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between">
+                <div class="modal-input">
+                    <label>Sub Hours</label>
+                    <div class="font-weight-bold" id="hours">0</div>
+                </div>
                 <div class="modal-input">
                     <label>Sub Total</label>
                     <div class="font-weight-bold" id="price">$ 1000</div>

@@ -1,35 +1,51 @@
 // Resource types depend on VM Size
 var vmObject = {
     "Small": {
-        "CPU": ["1CPU"],
-        "Memory": [".5GB", "1GB", "3.5GB"],
-        "Disk": ["50GB", "100GB", "200GB"]
+        "CPU": [1,2,4,8,16,32,64,96],
+        "Memory": [4,7,15,30,60,120,240,360],
+        "CPU_yr" :[57.90, 59.16],
+        "Memory_yr" :[50.30, 51.79],
+        "CPU_ct" : [0.0199,0.0142],
+        "Memory_ct" : [0.0027,0.0019],
     },
 
     "Medium": {
-        "CPU": ["2CPU"],
-        "Memory": ["8GB", "16GB"],
-        "Disk": ["50GB", "100GB", "200GB"]
+        "CPU": [2,4,8,16,32,48,64,80,96,128],
+        "Memory": [8,16,32,64,128,192,156,320,384,512],
+        "CPU_yr" :[57.90, 59.16],
+        "Memory_yr" :[50.30, 51.79],
+        "CPU_ct" : [0.0199,0.0142],
+        "Memory_ct" : [0.0027,0.0019],
     },
 
     "Large": {
-        "CPU": ["4CPU"],
-        "Memory": ["7GB", "8GB", "14GB", "16GB", "28GB"],
-        "Disk": ["50GB", "100GB", "200GB"]  
+        "CPU": [4,8,16,30,60],
+        "Memory": [16,32,64,120,240],
+        "CPU_yr" :[57.90, 59.16],
+        "Memory_yr" :[50.30, 51.79],
+        "CPU_ct" : [0.0214,0.0136],
+        "Memory_ct" : [0.0029,0.0018],
     },
     
     "X-Large": {
-        "CPU": ["8CPU"],
-        "Memory": ["16GB", "28GB", "32GB", "64GB"],
-        "Disk": ["50GB", "100GB", "200GB"]
+        "CPU": [40,80,96,160],
+        "Memory": [961,1922,1434,3844],
+        "CPU_yr" :[57.90, 59.16],
+        "Memory_yr" :[50.30, 51.79],
+        "CPU_ct" : [0.0206,0.0105],
+        "Memory_ct" : [0.003,0.0015],
       },
 
     "XX-Large": {
-      "CPU": ["16CPU"],
-      "Memory": ["32GB", "64GB"],
-      "Disk": ["50GB", "100GB", "200GB"]
-    }
+      "CPU": [2,4,8,16,32],
+      "Memory": [8,16,32,64,128],
+      "CPU_yr" :[57.90, 59.16],
+      "Memory_yr" :[50.30, 51.79],
+      "CPU_ct" : [0.0137,0.0098],
+      "Memory_ct" : [0.0018,0.0013],
+  },
 }
+
 
 // Static Resource Prices per cloud provider and Region
 var prices = {
@@ -57,6 +73,8 @@ var prices = {
         disk: 70
     }]
 }
+var disks = ["HDD","SSD"];
+var years = [1,2,3];
 var clouds = ['AWS', 'Azure', 'Onprem'];                            // Cloud provider types
 var sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large'];    // VM Size types
 var regions = ['West', 'East'];                                     // Region types
@@ -88,11 +106,19 @@ function getSelectedObject() {
     const size = $('#size').val();
     const region = $('#region').val();
     const count = parseInt($('#count').val());
-    const cpu = $('#cpu').val();
-    const memory = $('#memory').val();
+    const weekly = parseInt($('#weekly').val());
+    const cpu_index = parseInt($('#cpu').val());
+    const obj = getVMObject(size);
+    let cpu = 0;
+    let memory = 0;    
+    if(obj && cpu_index >= 0){
+        cpu = obj["CPU"][cpu_index];        
+        memory = obj["Memory"][cpu_index];    
+    }
     const disk = $('#disk').val();
+    const year = $('#year').val();
 
-    return { cloud, size, count, cpu, memory, disk, region };
+    return { cloud, size, count, cpu, memory, cpu_index, disk, region, weekly, year };
 }
 
 // This function is used to initialize Region Select HTML DOM.
@@ -113,6 +139,20 @@ function initVMSize () {
     $('#size').html(html);
 }
 
+function initDisk() {
+    let html = '<option value="">Select Disk</option>' + generateOptionHTML(disks);
+    $('#disk').html(html);
+}
+
+function initYear() {
+    let html = '<option value="">Select Year</option>' ;
+    for(let i=0; i<years.length; i++){
+        html += `<option value="${years[i]}">${years[i]}</option>`
+    }
+    $('#year').html(html);
+}
+
+
 // This function checks cloud provider and if it is 'onprem', then disable the region Select HTML DOM.
 function initRegionActive() {
     const cloud = $('#cloud').val();
@@ -126,28 +166,27 @@ function initRegionActive() {
 
 // This function is used to initialize Recourses Select HTML DOM (CPU, Memory, Disk)
 function initComponents () {
-    const cloud = $('#cloud').val(), size = $('#size').val();
-    const keys = ['cpu', 'memory', 'disk']
-    const labels = ['CPU', 'Memory', 'Disk']
-    keys.forEach((key, idx) => {
-        let html;
-        if (!size) html = `<option value="">Please select VM size first</option>`
-        else if (!cloud) html = `<option value="">Please select Cloud Provider first</option>`
-        else html = `<option value="">Select ${labels[idx]}</option>`
+    const cloud = $('#cloud').val(), size = $('#size').val();    
+    let html;
+    if (!size) html = `<option value="">Please select VM size first</option>`
+    else if (!cloud) html = `<option value="">Please select Cloud Provider first</option>`
+    else html = `<option value="">Select CPU:Memory</option>`
 
-        const obj = getVMObject(size);
-        if (cloud && obj) {
-            const items = obj[labels[idx]];
-            html += generateOptionHTML(items);
-        }        
-        $(`#${key}`).html(html);
-    })
+    const obj = getVMObject(size);
+    if (cloud && obj) {
+        for(let i=0; i<obj["CPU"].length; i++){
+            const cpu = obj["CPU"][i];
+            const memory = obj["Memory"][i];
+            html += `<option value=${i}>${cpu}:${memory}</option>`;
+        }
+    }        
+    $(`#cpu`).html(html);
 }
 
 // This function checks if you select all infos
 // Also validate the quantity of the carts.
 function validateInfo (info, show_error = false) {
-    const keys = ['cloud', 'size', 'memory', 'disk', 'cpu', 'count', 'region'];
+    const keys = ['cloud', 'size', 'disk', 'cpu', 'count', 'region','year'];
     let flag = true;
     for (let i = 0; i < keys.length; i ++) {
         const key = keys[i];
@@ -180,16 +219,33 @@ function getPrice(info) {
         const cpu = parseFloat(info.cpu) || 0;
         const memory = parseFloat(info.memory) || 0;
         const disk = parseFloat(info.disk) || 0;
-        price = ((cpu * prices[cloud][idx].cpu) + (memory * prices[cloud][idx].memory) + (disk * prices[cloud][idx].disk)) * info.count;
+        const weekly = info.weekly;
+        const year = info.year;        
+        const obj = getVMObject(info.size);
+
+        const year_n = year>2?1:0 ;
+        const year_hours = year * 52 * weekly;
+
+        const cpu_yr = obj["CPU_yr"][year_n];
+        const memory_yr = obj["Memory_yr"][year_n];
+
+        const cpu_ct = obj["CPU_ct"][year_n];
+        const memory_ct = obj["Memory_ct"][year_n];
+
+        price = cpu_ct*year_hours*(100-cpu_yr)+memory_ct*year_hours*(100-memory_yr) //((cpu * prices[cloud][idx].cpu) + (memory * prices[cloud][idx].memory) + (disk * prices[cloud][idx].disk)) * info.count;
+        price  = price*info.count * (info.cpu_index+1);
+        price = parseFloat(price.toFixed(2));
     }
     return price;
 }
 
-// Update price HTML DOM which you can see on the website.
+// Update price HTML DOM which you can see on the website.Rafael H
 function updatePrice () {
     const info = getSelectedObject();
     const price = getPrice(info);
     $('#price').html('$' + price);
+    const yearly = info.weekly * 52;
+    $('#hours').html(yearly + "hr");
 }
 
 // This function is event trigger.
@@ -249,7 +305,7 @@ function updateCarts() {
     }
     $('#carts').html(html);
     $('#total-count').html(carts.length);
-    $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price, 0));
+    $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price, 0).toFixed(2));
 }
 
 // This is event trigger.
@@ -302,6 +358,8 @@ $(function() {
     $('#add-btn').click(() => addBtnClicked());
 
     initRegion();
+    initDisk();
+    initYear();
     initCloudSelect();
     initVMSize();
     initComponents();
