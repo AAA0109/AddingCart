@@ -76,6 +76,7 @@ var prices = {
 var disks = ["HDD","SSD"];
 var disk_size = ["100G","150G","200G"] ;
 var disk_count = [1,2,3] ;
+var disk_price = 0.02 ;
 
 var years = [1,2,3];
 var clouds = ['AWS', 'Azure','GCP' , 'Onprem'];                            // Cloud provider types
@@ -362,6 +363,9 @@ function updateCarts() {
         <td>${cart.cpu}</td>
         <td>${cart.memory}</td>
         <td>${cart.year}</td>
+        <td>${cart.price.discount_price[0]}</td>
+        <td>${cart.price.discount_price[1]}</td>
+        <td>${cart.price.discount_price[2]}</td>
         <td>
             <div class="d-flex align-items-start justify-content-center">
                 <div class="decrease-count" onclick="decreaseCount(${cart.id})">-</div>
@@ -373,14 +377,12 @@ function updateCarts() {
             $${cart.price.price.toFixed(2)}
             <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
-        <td>${cart.price.discount_price[0]}</td>
-        <td>${cart.price.discount_price[1]}</td>
-        <td>${cart.price.discount_price[2]}</td>
         </tr>`
 
         if(cart.disk!=""){
             total_disk_count += parseInt(cart.disk_count);
-            total_dist_size += parseInt(cart.disk_size.replace("G",""));
+            let disk_p = parseInt(cart.disk_size.replace("G",""))*parseInt(cart.year)*parseInt(cart.weekly)*52*disk_price*parseInt(cart.disk_count);
+            total_dist_size += disk_p;
             html_disk += `<tr class="cart-item">
             <td class="item">
                 <div class="d-flex align-items-center">
@@ -399,14 +401,17 @@ function updateCarts() {
             </td>
             <td class="font-weight-bold close-container">
                 ${cart.disk_size}
+            </td>
+            <td class="font-weight-bold close-container">
+                $${disk_p}
                 <div class="cart-remove close" onclick="removeDisk(${cart.id})">&times;</div>
             </td>
             </tr>`
         }
     }
     if (!carts.length) {
-        html = '<tr><td colspan=8><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
-        html_disk = '<tr><td colspan=8><hr class="mt-0">No disks<hr class="mb-0"></td></tr>'
+        html = '<tr><td colspan=11><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
+        html_disk = '<tr><td colspan=4> <hr class="mt-0">No disks<hr class="mb-0"> </td></tr>'
     }
     $('#carts').html(html);
     $('#disks').html(html_disk);
@@ -414,7 +419,7 @@ function updateCarts() {
     $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price.price, 0).toFixed(2));
 
     $('#total-disk-count').html(total_disk_count);
-    $('#total-disk-price').html(total_dist_size+"G");
+    $('#total-disk-price').html("$"+total_dist_size);
 
 }
 
