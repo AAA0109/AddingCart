@@ -73,10 +73,10 @@ var prices = {
         disk: 70
     }]
 }
-var disks = ["HDD","SSD"];
+var disk_names = ["HDD","SSD"];
 var disk_size = ["100G","150G","200G"] ;
 var disk_count = [1,2,3] ;
-var disk_price = 0.02 ;
+var disk_price = 2 ;
 
 var years = [1,2,3];
 var clouds = ['AWS', 'Azure','GCP' , 'Onprem'];                            // Cloud provider types
@@ -85,6 +85,8 @@ var regions = ['West', 'East'];                                     // Region ty
 
 var carts = [];         // Saved Shopping Carts list
 var cartId = 1;         // Unique ID (this is increased each time you add a cart to shopping carts)
+var disks = [];
+var diskId = 1;
 
 // Get Resource types by the given VM Size
 function getVMObject (size) {
@@ -124,7 +126,15 @@ function getSelectedObject() {
     const disk_count = $('#disk_count').val();
     const disk_size = $('#disk_size').val();
 
-    return { cloud, size, count, cpu, memory, cpu_index, disk, disk_count, disk_size, region, weekly, year };
+    return { cloud, size, count, cpu, memory, cpu_index, region, weekly, year };
+}
+
+function getSelectedDiskObject() {
+    const disk = $('#disk').val();
+    const disk_count = $('#disk_count').val();
+    const disk_size = $('#disk_size').val();
+
+    return {disk, disk_count, disk_size};
 }
 
 // This function is used to initialize Region Select HTML DOM.
@@ -146,7 +156,7 @@ function initVMSize () {
 }
 
 function initDisk() {
-    let html = '<option value="">Select Disk</option>' + generateOptionHTML(disks);
+    let html = '<option value="">Select Disk</option>' + generateOptionHTML(disk_names);
     $('#disk').html(html);
 
     let html_size = '<option value="">Select Disk Size</option>' + generateOptionHTML(disk_size);
@@ -235,26 +245,23 @@ function validateInfo (info, show_error = false) {
             flag = false;
         }
     }
-    if((info["disk"])!="") {
-        const keys_disk = ['disk_count', 'disk_size'];
-        for (let i = 0; i < keys_disk.length; i ++) {
-            const key_disk = keys_disk[i];
-            if (key_disk === 'region') {
-                if (info.cloud.toLocaleLowerCase() === 'onprem') {
-                    $('#' + key_disk + '-error').removeClass('show');
-                    continue;
-                }
-            }
-            if((key_disk !== 'count' && info[key_disk]) || (key_disk === 'count' && info[key_disk] > 0)) {
-                $('#' + key_disk + '-error').removeClass('show');
-            }
-            else {
-                if(show_error)
-                    $('#' + key_disk + '-error').addClass('show');
-                flag = false;
-            }
-        }    
-    }
+    return flag;
+}
+
+function validateDiskInfo (info, show_error = false) {
+    let flag = true;
+    const keys_disk = ['disk_count', 'disk_size'];
+    for (let i = 0; i < keys_disk.length; i ++) {
+        const key_disk = keys_disk[i];
+        if((key_disk !== 'count' && info[key_disk]) || (key_disk === 'count' && info[key_disk] > 0)) {
+            $('#' + key_disk + '-error').removeClass('show');
+        }
+        else {
+            if(show_error)
+                $('#' + key_disk + '-error').addClass('show');
+            flag = false;
+        }
+    }    
     return flag;
 }
 
@@ -378,46 +385,53 @@ function updateCarts() {
             <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
         </tr>`
-
-        if(cart.disk!=""){
-            total_disk_count += parseInt(cart.disk_count);
-            let disk_p = parseInt(cart.disk_size.replace("G",""))*parseInt(cart.year)*parseInt(cart.weekly)*52*disk_price*parseInt(cart.disk_count);
-            total_dist_size += disk_p;
-            html_disk += `<tr class="cart-item">
-            <td class="item">
-                <div class="d-flex align-items-center">
-                    <img src="./img/disk.jpg" alt="">
-                    <div class="item-cloud">
-                        ${cart.disk}
-                    </div>
-                </div>
-            </td>
-            <td>
-            <div class="d-flex align-items-start justify-content-center">
-                <div class="decrease-count" onclick="decreaseDiskCount(${cart.id})">-</div>
-                <div class="count">${cart.disk_count}</div>
-                <div class="increase-count" onclick="increaseDiskCount(${cart.id})">+</div>
-            </div>
-            </td>
-            <td class="font-weight-bold close-container">
-                ${cart.disk_size}
-            </td>
-            <td class="font-weight-bold close-container">
-                $${disk_p}
-                <div class="cart-remove close" onclick="removeDisk(${cart.id})">&times;</div>
-            </td>
-            </tr>`
-        }
     }
     if (!carts.length) {
         html = '<tr><td colspan=11><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
-        html_disk = '<tr><td colspan=4> <hr class="mt-0">No disks<hr class="mb-0"> </td></tr>'
     }
     $('#carts').html(html);
-    $('#disks').html(html_disk);
     $('#total-count').html(carts.length);
     $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price.price, 0).toFixed(2));
+}
 
+function updateDisk() {
+    let html_disk = '';
+    let total_disk_count = 0 ;
+    let total_dist_size = 0;
+    for(let i = 0; i < disks.length; i ++) {
+        const cart = disks[i];
+        total_disk_count += parseInt(cart.disk_count);
+        let disk_p = parseInt(cart.disk_size.replace("G",""))*disk_price*parseInt(cart.disk_count);
+        total_dist_size += disk_p;
+        html_disk += `<tr class="cart-item">
+        <td class="item">
+            <div class="d-flex align-items-center">
+                <img src="./img/disk.jpg" alt="">
+                <div class="item-cloud">
+                    ${cart.disk}
+                </div>
+            </div>
+        </td>
+        <td>
+        <div class="d-flex align-items-start justify-content-center">
+            <div class="decrease-count" onclick="decreaseDiskCount(${cart.id})">-</div>
+            <div class="count">${cart.disk_count}</div>
+            <div class="increase-count" onclick="increaseDiskCount(${cart.id})">+</div>
+        </div>
+        </td>
+        <td class="font-weight-bold close-container">
+            ${cart.disk_size}
+        </td>
+        <td class="font-weight-bold close-container">
+            $${disk_p}
+            <div class="cart-remove close" onclick="removeDisk(${cart.id})">&times;</div>
+        </td>
+        </tr>`
+    }
+    if (!disks.length) {
+        html_disk = '<tr><td colspan=4> <hr class="mt-0">No disks<hr class="mb-0"> </td></tr>'
+    }
+    $('#disks').html(html_disk);
     $('#total-disk-count').html(total_disk_count);
     $('#total-disk-price').html("$"+total_dist_size);
 
@@ -444,28 +458,28 @@ function increaseCount(id) {
 
 // Decrease button clicked
 function decreaseDiskCount(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
-    if (idx === -1 || carts[idx].disk_count <= 0) return -1;
-    carts[idx].disk_count --;
-    updateCarts();
+    const idx = disks.findIndex(itm => itm.id == id);
+    if (idx === -1 || disks[idx].disk_count <= 0) return -1;
+    disks[idx].disk_count --;
+    updateDisk();
     return false;
 }
 
 function removeDisk(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
-    if (idx === -1 || carts[idx].disk_count <= 0) return -1;
-    carts[idx].disk = "";
-    carts[idx].disk_count = 0;    
-    updateCarts();
+    const idx = disks.findIndex(itm => itm.id == id);
+    if (idx === -1 || disks[idx].disk_count <= 0) return -1;
+    disks[idx].disk = "";
+    disks[idx].disk_count = 0;    
+    updateDisk();
     return false;
 }
 
 // Increate button clicked
 function increaseDiskCount(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
+    const idx = disks.findIndex(itm => itm.id == id);
     if (idx === -1) return -1;
-    carts[idx].disk_count ++;
-    updateCarts();
+    disks[idx].disk_count ++;
+    updateDisk();
     return false;
 }
 
@@ -494,11 +508,24 @@ function addBtnClicked() {
     updateCarts();
 }
 
+function addDiskClicked() {
+    const info = getSelectedDiskObject();
+    if (!validateDiskInfo(info, true)) return;
+    
+    disks.push({
+        id: diskId ++,
+        ...info
+    });
+
+    updateDisk();
+}
+
 // Initializing function
 // equals document.ready
 $(function() {
     $('#add-btn').click(() => addBtnClicked());
-
+    $('#add-disk').click(() => addDiskClicked());
+    
     initRegion();
     initDisk();
     initYear();
