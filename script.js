@@ -1,8 +1,8 @@
 // Resource types depend on VM Size
 var vmObject = {
     "Small": {
-        "CPU": [1,2,4,8,16,32,64,96],
-        "Memory": [4,7,15,30,60,120,240,360],
+        "CPU": [2,4,8,16,32],
+        "Memory": [8,16,32,64,128],
         "CPU_yr" :[57.90, 59.16],
         "Memory_yr" :[50.30, 51.79],
         "CPU_ct" : [0.0199,0.0142],
@@ -10,8 +10,8 @@ var vmObject = {
     },
 
     "Medium": {
-        "CPU": [2,4,8,16,32,48,64,80,96,128],
-        "Memory": [8,16,32,64,128,192,156,320,384,512],
+        "CPU": [4,8,16,30,60],
+        "Memory": [16,32,64,120,240],
         "CPU_yr" :[57.90, 59.16],
         "Memory_yr" :[50.30, 51.79],
         "CPU_ct" : [0.0199,0.0142],
@@ -19,8 +19,8 @@ var vmObject = {
     },
 
     "Large": {
-        "CPU": [4,8,16,30,60],
-        "Memory": [16,32,64,120,240],
+        "CPU": [1,2,4,8,16,32,64,96],
+        "Memory": [4,7,15,30,60,120,240,360],
         "CPU_yr" :[57.90, 59.16],
         "Memory_yr" :[50.30, 51.79],
         "CPU_ct" : [0.0214,0.0136],
@@ -28,8 +28,8 @@ var vmObject = {
     },
     
     "X-Large": {
-        "CPU": [40,80,96,160],
-        "Memory": [961,1922,1434,3844],
+        "CPU": [2,4,8,16,32,48,64,80,96,128],
+        "Memory": [8,16,32,64,128,192,156,320,384,512],
         "CPU_yr" :[57.90, 59.16],
         "Memory_yr" :[50.30, 51.79],
         "CPU_ct" : [0.0206,0.0105],
@@ -37,12 +37,12 @@ var vmObject = {
       },
 
     "XX-Large": {
-      "CPU": [2,4,8,16,32],
-      "Memory": [8,16,32,64,128],
-      "CPU_yr" :[57.90, 59.16],
-      "Memory_yr" :[50.30, 51.79],
-      "CPU_ct" : [0.0137,0.0098],
-      "Memory_ct" : [0.0018,0.0013],
+        "CPU": [40,80,96,160],
+        "Memory": [961,1922,1434,3844],
+        "CPU_yr" :[57.90, 59.16],
+        "Memory_yr" :[50.30, 51.79],
+        "CPU_ct" : [0.0137,0.0098],
+        "Memory_ct" : [0.0018,0.0013],
   },
 }
 
@@ -74,8 +74,11 @@ var prices = {
     }]
 }
 var disks = ["HDD","SSD"];
+var disk_size = ["100G","150G","200G"] ;
+var disk_count = [1,2,3] ;
+
 var years = [1,2,3];
-var clouds = ['AWS', 'Azure', 'Onprem'];                            // Cloud provider types
+var clouds = ['AWS', 'Azure','GCP' , 'Onprem'];                            // Cloud provider types
 var sizes = ['Small', 'Medium', 'Large', 'X-Large', 'XX-Large'];    // VM Size types
 var regions = ['West', 'East'];                                     // Region types
 
@@ -115,10 +118,12 @@ function getSelectedObject() {
         cpu = obj["CPU"][cpu_index];        
         memory = obj["Memory"][cpu_index];    
     }
-    const disk = $('#disk').val();
     const year = $('#year').val();
+    const disk = $('#disk').val();
+    const disk_count = $('#disk_count').val();
+    const disk_size = $('#disk_size').val();
 
-    return { cloud, size, count, cpu, memory, cpu_index, disk, region, weekly, year };
+    return { cloud, size, count, cpu, memory, cpu_index, disk, disk_count, disk_size, region, weekly, year };
 }
 
 // This function is used to initialize Region Select HTML DOM.
@@ -142,6 +147,13 @@ function initVMSize () {
 function initDisk() {
     let html = '<option value="">Select Disk</option>' + generateOptionHTML(disks);
     $('#disk').html(html);
+
+    let html_size = '<option value="">Select Disk Size</option>' + generateOptionHTML(disk_size);
+    $('#disk_size').html(html_size);
+
+    let html_count = '<option value="">Select Disk Count</option>' + generateOptionHTML(disk_count);
+    $('#disk_count').html(html_count);
+
 }
 
 function initYear() {
@@ -168,25 +180,42 @@ function initRegionActive() {
 function initComponents () {
     const cloud = $('#cloud').val(), size = $('#size').val();    
     let html;
-    if (!size) html = `<option value="">Please select VM size first</option>`
-    else if (!cloud) html = `<option value="">Please select Cloud Provider first</option>`
-    else html = `<option value="">Select CPU:Memory</option>`
-
+    let html_memory;
+    if (!size) {
+        html = `<option value="">Please select VM size first</option>`
+        html_memory = `<option value="">Please select VM size first</option>`
+    }
+    else if (!cloud){
+        html = `<option value="">Please select Cloud Provider first</option>`
+        html_memory = `<option value="">Please select Cloud Provider first</option>`
+    } 
+    else {
+        html = `<option value="">Select CPU</option>`
+        html_memory = `<option value="">Select Memory</option>`
+    }
     const obj = getVMObject(size);
     if (cloud && obj) {
         for(let i=0; i<obj["CPU"].length; i++){
             const cpu = obj["CPU"][i];
             const memory = obj["Memory"][i];
-            html += `<option value=${i}>${cpu}:${memory}</option>`;
+            html += `<option value=${i}>${cpu}</option>`;
         }
     }        
     $(`#cpu`).html(html);
+
+    if (cloud && obj) {
+        for(let i=0; i<obj["CPU"].length; i++){
+            const memory = obj["Memory"][i];
+            html_memory += `<option value=${i}>${memory}</option>`;
+        }
+    } 
+    $(`#memory`).html(html_memory);
 }
 
 // This function checks if you select all infos
 // Also validate the quantity of the carts.
 function validateInfo (info, show_error = false) {
-    const keys = ['cloud', 'size', 'disk', 'cpu', 'count', 'region','year'];
+    const keys = ['cloud', 'size', 'disk', 'cpu', 'memory', 'count', 'region', 'year', 'disk_count', 'disk_size'];
     let flag = true;
     for (let i = 0; i < keys.length; i ++) {
         const key = keys[i];
@@ -211,7 +240,7 @@ function validateInfo (info, show_error = false) {
 // Estimate the sub price for selected resources.
 function getPrice(info) {
     let price = 0;
-    
+    let discount_price = [] ;
     if (validateInfo(info)) {
         let idx = regions.indexOf(info.region);
         if(idx === -1) idx = 0;
@@ -223,27 +252,42 @@ function getPrice(info) {
         const year = info.year;        
         const obj = getVMObject(info.size);
 
-        const year_n = year>2?1:0 ;
-        const year_hours = year * 52 * weekly;
+        const year_hours = 52 * weekly;
 
-        const cpu_yr = obj["CPU_yr"][year_n];
-        const memory_yr = obj["Memory_yr"][year_n];
+        price = 0;
+        
 
-        const cpu_ct = obj["CPU_ct"][year_n];
-        const memory_ct = obj["Memory_ct"][year_n];
+        for(let i=0; i<year; i++){
+            const year_n = i==2?1:0 ;
+            let cpu_yr = obj["CPU_yr"][year_n];
+            let memory_yr = obj["Memory_yr"][year_n];
 
-        price = cpu_ct*year_hours*(100-cpu_yr)+memory_ct*year_hours*(100-memory_yr) //((cpu * prices[cloud][idx].cpu) + (memory * prices[cloud][idx].memory) + (disk * prices[cloud][idx].disk)) * info.count;
-        price  = price*info.count * (info.cpu_index+1);
-        price = parseFloat(price.toFixed(2));
+            let cpu_ct = obj["CPU_ct"][year_n];
+            let memory_ct = obj["Memory_ct"][year_n];
+            if(cloud=="Onprem"){
+                cpu_yr = 0 ;
+                memory_yr = 0 ;
+            }    
+            
+            let year_price = cpu_ct*year_hours*(100-cpu_yr)/100 + memory_ct*year_hours*(100-memory_yr)/100 //((cpu * prices[cloud][idx].cpu) + (memory * prices[cloud][idx].memory) + (disk * prices[cloud][idx].disk)) * info.count;
+            year_price  = year_price*info.count * (info.cpu_index+1);
+            year_price = parseFloat(year_price.toFixed(2));
+
+            let year_discount = cpu_ct*year_hours*(cpu_yr)/100 + memory_ct*year_hours*(memory_yr)/100;
+            year_discount  = year_discount*info.count * (info.cpu_index+1);
+            discount_price.push('$'+year_discount.toFixed(2)) ;
+            price+= year_price;
+        }
+
     }
-    return price;
+    return {price, discount_price};
 }
 
 // Update price HTML DOM which you can see on the website.Rafael H
 function updatePrice () {
     const info = getSelectedObject();
     const price = getPrice(info);
-    $('#price').html('$' + price);
+    $('#price').html('$' + price.price.toFixed(2));
     const yearly = info.weekly * 52;
     $('#hours').html(yearly + "hr");
 }
@@ -263,14 +307,23 @@ function changedInput(type) {
         case 'size':
             initComponents();
             break;
+        case 'cpu':
+            $('#memory').val($('#cpu').val());
+            break;
+        case 'memory':
+            $('#cpu').val($('#memory').val());
+            break;
+    
     }
     updatePrice();
 }
+
 
 // This function is used to update shopping cart table
 // Generate HTML Code and replace DOM.
 function updateCarts() {
     let html = '';
+    let html_disk = '';
     for(let i = 0; i < carts.length; i ++) {
         const cart = carts[i];
         html += `<tr class="cart-item">
@@ -286,7 +339,7 @@ function updateCarts() {
         <td>${cart.region}</td>
         <td>${cart.cpu}</td>
         <td>${cart.memory}</td>
-        <td>${cart.disk}</td>
+        <td>${cart.year}</td>
         <td>
             <div class="d-flex align-items-start justify-content-center">
                 <div class="decrease-count" onclick="decreaseCount(${cart.id})">-</div>
@@ -295,17 +348,34 @@ function updateCarts() {
             </div>
         </td>
         <td class="font-weight-bold close-container">
-            $${cart.price}
+            $${cart.price.price.toFixed(2)}
             <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
+        <td>${cart.price.discount_price.join('/')}</td>
     </tr>`
+
+
+        html_disk += `<tr class="cart-item">
+            <td class="item">
+                <div class="d-flex align-items-center">
+                    <img src="./img/disk.jpg" alt="">
+                    <div class="item-cloud">
+                        ${cart.disk}
+                    </div>
+                </div>
+            </td>
+            <td>${cart.disk_size}</td>
+            <td>${cart.disk_count}</td>
+        </tr>`
     }
     if (!carts.length) {
         html = '<tr><td colspan=8><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
+        html_disk = '<tr><td colspan=8><hr class="mt-0">No disks<hr class="mb-0"></td></tr>'
     }
     $('#carts').html(html);
+    $('#disks').html(html_disk);
     $('#total-count').html(carts.length);
-    $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price, 0).toFixed(2));
+    $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price.price, 0).toFixed(2));
 }
 
 // This is event trigger.

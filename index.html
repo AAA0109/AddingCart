@@ -43,8 +43,15 @@
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
-                        <label>CPU:Memory</label>
+                        <label>CPU</label>
                         <select class="form-control" id="cpu" onchange="changedInput('cpu');"></select>
+                    </div>
+                    <div class="input-error" id="cpu-error">* Select CPU.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Memory</label>
+                        <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
                     </div>
                     <div class="input-error" id="cpu-error">* Select CPU.</div>
                 </div>
@@ -54,14 +61,7 @@
                         <input class="form-control" id="weekly" value="30" type="number" onchange="changedInput('weekly')"></input>
                     </div>
                     <div class="input-error" id="memory-error">* Select Weekly.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>Disk</label>
-                        <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
-                    </div>
-                    <div class="input-error" id="disk-error">* Select Disk.</div>
-                </div>
+                </div>                
                 <div class="col-md-5">
                     <div class="modal-input">
                         <label>Year</label>
@@ -69,6 +69,30 @@
                     </div>
                     <div class="input-error" id="year-error">* Select Year.</div>
                 </div>
+            </div>
+            <hr>
+            <div class="row justify-content-between">
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Disk</label>
+                        <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
+                    </div>
+                    <div class="input-error" id="disk-error">* Select Disk.</div>
+                </div> 
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Size</label>
+                        <select class="form-control" id="disk_size" onchange="changedInput('disk_size');"></select>
+                    </div>
+                    <div class="input-error" id="disk_size-error">* Select Disk Size.</div>
+                </div> 
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Count</label>
+                        <select class="form-control" id="disk_count" onchange="changedInput('disk_count');"></select>
+                    </div>
+                    <div class="input-error" id="disk_count-error">* Select Disk Count.</div>
+                </div>    
             </div>
             <hr>
             <div class="row justify-content-between">
@@ -90,7 +114,7 @@
             <hr>
             <div class="d-flex justify-content-between">
                 <div class="modal-input">
-                    <label>Sub Hours</label>
+                    <label>Year Hours</label>
                     <div class="font-weight-bold" id="hours">0</div>
                 </div>
                 <div class="modal-input">
@@ -115,9 +139,10 @@
                             <th scope="col" class="text-uppercase">Region</th>
                             <th scope="col" class="text-uppercase">CPU</th>
                             <th scope="col" class="text-uppercase">Memory</th>
-                            <th scope="col" class="text-uppercase">Disk</th>
+                            <th scope="col" class="text-uppercase">Year</th>
                             <th scope="col" class="text-uppercase">Quantity</th>
                             <th scope="col" class="text-uppercase">Price</th>
+                            <th scope="col" class="text-uppercase">Discounted Price</th>
                         </tr>
                     </thead>
                     <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
@@ -140,6 +165,25 @@
             </div>
         </div>
         <!-- Shopping Cart Table End -->
+
+        <div class="h3 mt-5">Shopping Disk</div>
+        <div id="table" class="bg-white rounded">
+            <hr>
+            <hr class="items">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-uppercase">Disk</th>
+                            <th scope="col" class="text-uppercase">Size</th>
+                            <th scope="col" class="text-uppercase">Count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="disks"> <!-- Main Table Content (Will be updated with javascript) -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
     <!-- Main Content End -->
 <script src="script.js"></script>
