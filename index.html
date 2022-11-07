@@ -142,7 +142,9 @@
                             <th scope="col" class="text-uppercase">Year</th>
                             <th scope="col" class="text-uppercase">Quantity</th>
                             <th scope="col" class="text-uppercase">Price</th>
-                            <th scope="col" class="text-uppercase">Discounted Price</th>
+                            <th scope="col" class="text-uppercase">1st</th>
+                            <th scope="col" class="text-uppercase">2nd</th>
+                            <th scope="col" class="text-uppercase">3rd</th>
                         </tr>
                     </thead>
                     <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
@@ -175,13 +177,27 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-uppercase">Disk</th>
-                            <th scope="col" class="text-uppercase">Size</th>
                             <th scope="col" class="text-uppercase">Count</th>
+                            <th scope="col" class="text-uppercase">Size</th>
                         </tr>
                     </thead>
                     <tbody id="disks"> <!-- Main Table Content (Will be updated with javascript) -->
                     </tbody>
                 </table>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column justify-content-start align-items-end">
+                <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                    <div class="px-4">Items</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-disk-count">1</div>
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-end align-items-end">
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-disk-price">$1,340</div>
+                </div>
             </div>
         </div>
     </div>

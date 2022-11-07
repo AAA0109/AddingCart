@@ -215,7 +215,7 @@ function initComponents () {
 // This function checks if you select all infos
 // Also validate the quantity of the carts.
 function validateInfo (info, show_error = false) {
-    const keys = ['cloud', 'size', 'disk', 'cpu', 'memory', 'count', 'region', 'year', 'disk_count', 'disk_size'];
+    const keys = ['cloud', 'size', 'cpu', 'memory', 'count', 'region', 'year'];    
     let flag = true;
     for (let i = 0; i < keys.length; i ++) {
         const key = keys[i];
@@ -234,13 +234,33 @@ function validateInfo (info, show_error = false) {
             flag = false;
         }
     }
+    if((info["disk"])!="") {
+        const keys_disk = ['disk_count', 'disk_size'];
+        for (let i = 0; i < keys_disk.length; i ++) {
+            const key_disk = keys_disk[i];
+            if (key_disk === 'region') {
+                if (info.cloud.toLocaleLowerCase() === 'onprem') {
+                    $('#' + key_disk + '-error').removeClass('show');
+                    continue;
+                }
+            }
+            if((key_disk !== 'count' && info[key_disk]) || (key_disk === 'count' && info[key_disk] > 0)) {
+                $('#' + key_disk + '-error').removeClass('show');
+            }
+            else {
+                if(show_error)
+                    $('#' + key_disk + '-error').addClass('show');
+                flag = false;
+            }
+        }    
+    }
     return flag;
 }
 
 // Estimate the sub price for selected resources.
 function getPrice(info) {
     let price = 0;
-    let discount_price = [] ;
+    let discount_price = ["-","-","-"] ;
     if (validateInfo(info)) {
         let idx = regions.indexOf(info.region);
         if(idx === -1) idx = 0;
@@ -275,7 +295,7 @@ function getPrice(info) {
 
             let year_discount = cpu_ct*year_hours*(cpu_yr)/100 + memory_ct*year_hours*(memory_yr)/100;
             year_discount  = year_discount*info.count * (info.cpu_index+1);
-            discount_price.push('$'+year_discount.toFixed(2)) ;
+            discount_price[i]='$'+year_discount.toFixed(2) ;
             price+= year_price;
         }
 
@@ -324,6 +344,8 @@ function changedInput(type) {
 function updateCarts() {
     let html = '';
     let html_disk = '';
+    let total_disk_count = 0 ;
+    let total_dist_size = 0;
     for(let i = 0; i < carts.length; i ++) {
         const cart = carts[i];
         html += `<tr class="cart-item">
@@ -351,11 +373,15 @@ function updateCarts() {
             $${cart.price.price.toFixed(2)}
             <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
-        <td>${cart.price.discount_price.join('/')}</td>
-    </tr>`
+        <td>${cart.price.discount_price[0]}</td>
+        <td>${cart.price.discount_price[1]}</td>
+        <td>${cart.price.discount_price[2]}</td>
+        </tr>`
 
-
-        html_disk += `<tr class="cart-item">
+        if(cart.disk!=""){
+            total_disk_count += parseInt(cart.disk_count);
+            total_dist_size += parseInt(cart.disk_size.replace("G",""));
+            html_disk += `<tr class="cart-item">
             <td class="item">
                 <div class="d-flex align-items-center">
                     <img src="./img/disk.jpg" alt="">
@@ -364,9 +390,19 @@ function updateCarts() {
                     </div>
                 </div>
             </td>
-            <td>${cart.disk_size}</td>
-            <td>${cart.disk_count}</td>
-        </tr>`
+            <td>
+            <div class="d-flex align-items-start justify-content-center">
+                <div class="decrease-count" onclick="decreaseDiskCount(${cart.id})">-</div>
+                <div class="count">${cart.disk_count}</div>
+                <div class="increase-count" onclick="increaseDiskCount(${cart.id})">+</div>
+            </div>
+            </td>
+            <td class="font-weight-bold close-container">
+                ${cart.disk_size}
+                <div class="cart-remove close" onclick="removeDisk(${cart.id})">&times;</div>
+            </td>
+            </tr>`
+        }
     }
     if (!carts.length) {
         html = '<tr><td colspan=8><hr class="mt-0">No carts<hr class="mb-0"></td></tr>'
@@ -376,6 +412,10 @@ function updateCarts() {
     $('#disks').html(html_disk);
     $('#total-count').html(carts.length);
     $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price.price, 0).toFixed(2));
+
+    $('#total-disk-count').html(total_disk_count);
+    $('#total-disk-price').html(total_dist_size+"G");
+
 }
 
 // This is event trigger.
@@ -393,6 +433,33 @@ function increaseCount(id) {
     if (idx === -1) return -1;
     carts[idx].count ++;
     carts[idx].price = getPrice(carts[idx]);
+    updateCarts();
+    return false;
+}
+
+// Decrease button clicked
+function decreaseDiskCount(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx === -1 || carts[idx].disk_count <= 0) return -1;
+    carts[idx].disk_count --;
+    updateCarts();
+    return false;
+}
+
+function removeDisk(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx === -1 || carts[idx].disk_count <= 0) return -1;
+    carts[idx].disk = "";
+    carts[idx].disk_count = 0;    
+    updateCarts();
+    return false;
+}
+
+// Increate button clicked
+function increaseDiskCount(id) {
+    const idx = carts.findIndex(itm => itm.id == id);
+    if (idx === -1) return -1;
+    carts[idx].disk_count ++;
     updateCarts();
     return false;
 }
