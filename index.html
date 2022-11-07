@@ -69,6 +69,32 @@
                     </div>
                     <div class="input-error" id="year-error">* Select Year.</div>
                 </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('region');">
+                        <label>Region</label>
+                        <select class="form-control" id="region"></select>
+                    </div>
+                    <div class="input-error" id="region-error">* Select Region.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>VM Count</label>
+                        <input type="number" value="1" class="form-control" min="1" step="1" id="count" onchange="changedInput('count')" />
+                    </div>
+                    <div class="input-error" id="count-error">* Input correct count.</div>
+                </div>    
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <div class="modal-input">
+                    <label>Year Hours</label>
+                    <div class="font-weight-bold" id="hours">0</div>
+                </div>
+                <div class="modal-input">
+                    <label>Sub Total</label>
+                    <div class="font-weight-bold" id="price">$ 1000</div>
+                </div>
+                <button type="button" class="btn btn-info" id="add-btn">Add VM</button>
             </div>
             <hr>
             <div class="row justify-content-between">
@@ -93,37 +119,41 @@
                     </div>
                     <div class="input-error" id="disk_count-error">* Select Disk Count.</div>
                 </div>    
-            </div>
-            <hr>
-            <div class="row justify-content-between">
-                <div class="col-md-5">
-                    <div class="modal-input" onchange="changedInput('region');">
-                        <label>Region</label>
-                        <select class="form-control" id="region"></select>
-                    </div>
-                    <div class="input-error" id="region-error">* Select Region.</div>
-                </div>
                 <div class="col-md-5">
                     <div class="modal-input">
-                        <label>VM Count</label>
-                        <input type="number" value="1" class="form-control" min="1" step="1" id="count" onchange="changedInput('count')" />
+                        <label>Weekly</label>
+                        <input class="form-control" id="disk_weekly" value="30" type="number" onchange="changedInput('disk_weekly')"></input>
                     </div>
-                    <div class="input-error" id="count-error">* Input correct count.</div>
+                    <div class="input-error" id="disk_weekly-error">* Select Weekly.</div>
+                </div>                
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Year</label>
+                        <select class="form-control" id="disk_year" onchange="changedInput('disk_year');"></select>
+                    </div>
+                    <div class="input-error" id="disk_year-error">* Select Year.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('disk_region');">
+                        <label>Region</label>
+                        <select class="form-control" id="disk_region"></select>
+                    </div>
+                    <div class="input-error" id="disk_region-error">* Select Region.</div>
                 </div>
             </div>
             <hr>
             <div class="d-flex justify-content-between">
                 <div class="modal-input">
                     <label>Year Hours</label>
-                    <div class="font-weight-bold" id="hours">0</div>
+                    <div class="font-weight-bold" id="disk_hours">0 hr</div>
                 </div>
                 <div class="modal-input">
                     <label>Sub Total</label>
-                    <div class="font-weight-bold" id="price">$ 1000</div>
+                    <div class="font-weight-bold" id="disk_price">$ 0.00</div>
                 </div>
                 <button type="button" class="btn btn-info" id="add-disk">Add Disk</button>
-                <button type="button" class="btn btn-info" id="add-btn">Add Cart</button>
             </div>
+            <hr>
         </div>
         <!-- Adding Cart Content End -->
         <!-- Shopping Cart Table Begin -->
@@ -163,7 +193,7 @@
             <div class="d-flex flex-column justify-content-end align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 subtotal">
                     <div class="px-4">Total</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-price">$1,340</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-price">$0.00</div>
                 </div>
             </div>
         </div>
@@ -178,8 +208,10 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-uppercase">Disk</th>
-                            <th scope="col" class="text-uppercase">Count</th>
                             <th scope="col" class="text-uppercase">Size</th>
+                            <th scope="col" class="text-uppercase">Year</th>
+                            <th scope="col" class="text-uppercase">Region</th>
+                            <th scope="col" class="text-uppercase">Count</th>
                             <th scope="col" class="text-uppercase">Price</th>
                         </tr>
                     </thead>
@@ -192,13 +224,13 @@
             <div class="d-flex flex-column justify-content-start align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 counttotal">
                     <div class="px-4">Items</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-disk-count">1</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-disk-count">0</div>
                 </div>
             </div>
             <div class="d-flex flex-column justify-content-end align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 subtotal">
                     <div class="px-4">Total</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-disk-price">$1,340</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-disk-price">$0.00</div>
                 </div>
             </div>
         </div>

@@ -133,14 +133,18 @@ function getSelectedDiskObject() {
     const disk = $('#disk').val();
     const disk_count = $('#disk_count').val();
     const disk_size = $('#disk_size').val();
+    const disk_region = $('#disk_region').val();    
+    const disk_weekly = $('#disk_weekly').val();    
+    const disk_year = $('#disk_year').val();    
 
-    return {disk, disk_count, disk_size};
+    return {disk, disk_count, disk_size, disk_region, disk_weekly, disk_year};
 }
 
 // This function is used to initialize Region Select HTML DOM.
 function initRegion() {
     let html = '<option value="">Select Region</option>' + generateOptionHTML(regions);
     $('#region').html(html);
+    $('#disk_region').html(html);
 }
 
 // This function is used to initialize Cloud Select HTML DOM.
@@ -173,6 +177,7 @@ function initYear() {
         html += `<option value="${years[i]}">${years[i]}</option>`
     }
     $('#year').html(html);
+    $('#disk_year').html(html);
 }
 
 
@@ -250,7 +255,7 @@ function validateInfo (info, show_error = false) {
 
 function validateDiskInfo (info, show_error = false) {
     let flag = true;
-    const keys_disk = ['disk_count', 'disk_size'];
+    const keys_disk = ['disk' ,'disk_count', 'disk_size', 'disk_region', 'disk_year'];
     for (let i = 0; i < keys_disk.length; i ++) {
         const key_disk = keys_disk[i];
         if((key_disk !== 'count' && info[key_disk]) || (key_disk === 'count' && info[key_disk] > 0)) {
@@ -316,7 +321,7 @@ function updatePrice () {
     const info = getSelectedObject();
     const price = getPrice(info);
     $('#price').html('$' + price.price.toFixed(2));
-    const yearly = info.weekly * 52;
+    const yearly = info.weekly * 52*info.year;
     $('#hours').html(yearly + "hr");
 }
 
@@ -344,7 +349,20 @@ function changedInput(type) {
     
     }
     updatePrice();
+    updateDiskPrice();
 }
+
+
+function updateDiskPrice () {
+    const info = getSelectedDiskObject();    
+    if(validateDiskInfo(info)){
+        const price = parseInt(info.disk_count)*parseInt(info.disk_year)*parseInt(info.disk_weekly)*disk_price*52;
+        $('#disk_price').html('$' + price);    
+        const yearly = parseInt(info.disk_year)*parseInt(info.disk_weekly)*52;
+        $('#disk_hours').html(yearly + "hr");
+    }
+}
+
 
 
 // This function is used to update shopping cart table
@@ -401,7 +419,7 @@ function updateDisk() {
     for(let i = 0; i < disks.length; i ++) {
         const cart = disks[i];
         total_disk_count += parseInt(cart.disk_count);
-        let disk_p = parseInt(cart.disk_size.replace("G",""))*disk_price*parseInt(cart.disk_count);
+        let disk_p = parseInt(cart.disk_count)*parseInt(cart.disk_year)*parseInt(cart.disk_weekly)*disk_price*52;
         total_dist_size += disk_p;
         html_disk += `<tr class="cart-item">
         <td class="item">
@@ -413,14 +431,20 @@ function updateDisk() {
             </div>
         </td>
         <td>
+            ${cart.disk_size}
+        </td>
+        <td>
+            ${cart.disk_year}
+        </td>
+        <td>
+            ${cart.disk_region}
+        </td>
+        <td>
         <div class="d-flex align-items-start justify-content-center">
             <div class="decrease-count" onclick="decreaseDiskCount(${cart.id})">-</div>
             <div class="count">${cart.disk_count}</div>
             <div class="increase-count" onclick="increaseDiskCount(${cart.id})">+</div>
         </div>
-        </td>
-        <td class="font-weight-bold close-container">
-            ${cart.disk_size}
         </td>
         <td class="font-weight-bold close-container">
             $${disk_p}
@@ -467,9 +491,7 @@ function decreaseDiskCount(id) {
 
 function removeDisk(id) {
     const idx = disks.findIndex(itm => itm.id == id);
-    if (idx === -1 || disks[idx].disk_count <= 0) return -1;
-    disks[idx].disk = "";
-    disks[idx].disk_count = 0;    
+    if (idx > -1) disks.splice(idx, 1);
     updateDisk();
     return false;
 }
@@ -534,5 +556,6 @@ $(function() {
     initComponents();
 
     updatePrice();
+    updateDiskPrice();
     updateCarts();
 })
