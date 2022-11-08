@@ -358,7 +358,7 @@ function changedInput(type) {
 function updateDiskPrice () {
     const info = getSelectedDiskObject();    
     if(validateDiskInfo(info)){
-        const price = parseInt(info.disk_count)*info.disk_p* 8760*parseInt(info.disk_size.replace('G',''));
+        const price = parseInt(info.disk_count)*info.disk_p*12*parseInt(info.disk_size.replace('G',''));
         $('#disk_price').html('$' + price.toFixed(2));    
     }
 }
@@ -403,8 +403,9 @@ function updateCarts() {
     }
     $('#carts').html(html);
     $('#total-count').html(carts.length);
-    $('#total-price').html('$' +carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2)+"/ $"
-    + carts.reduce((sum, itm) => sum + parseFloat(itm.price.total), 0).toFixed(2));
+    $('#total-price').html('$'+carts.reduce((sum, itm) => sum + parseFloat(itm.price.total), 0).toFixed(2));
+    $('#total-price-discount').html('$' +carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2))
+    
 }
 
 function updateDisk() {
@@ -414,7 +415,7 @@ function updateDisk() {
     for(let i = 0; i < disks.length; i ++) {
         const cart = disks[i];
         total_disk_count += parseInt(cart.disk_count); //parseInt(info.disk_count)**info.disk_p* 8760;
-        let disk_p = parseInt(cart.disk_count)*cart.disk_p* 8760*parseInt(cart.disk_size.replace('G',''));
+        let disk_p = parseInt(cart.disk_count)*cart.disk_p*12*parseInt(cart.disk_size.replace('G',''));
         total_dist_size += disk_p;
         html_disk += `<tr class="cart-item">
         <td class="item">

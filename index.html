@@ -172,7 +172,7 @@
                             <th scope="col" class="text-uppercase">Memory</th>
                             <th scope="col" class="text-uppercase">Quantity</th>
                             <th scope="col" class="text-uppercase">Discounted Price</th>
-                            <th scope="col" class="text-uppercase">Price</th>
+                            <th scope="col" class="text-uppercase">Price Without Discount</th>
                         </tr>
                     </thead>
                     <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
@@ -189,8 +189,12 @@
             </div>
             <div class="d-flex flex-column justify-content-end align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Total</div>
+                    <div class="px-4">Total without Discount</div>
                     <div class="h5 font-weight-bold px-md-2" id="total-price">$0.00</div>
+                </div>
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total with discount:</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-price-discount">$0.00</div>
                 </div>
             </div>
         </div>
