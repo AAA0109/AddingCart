@@ -55,14 +55,14 @@
                     </div>
                     <div class="input-error" id="cpu-error">* Select CPU.</div>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-5 d-none">
                     <div class="modal-input">
                         <label>Weekly</label>
                         <input class="form-control" id="weekly" value="30" type="number" onchange="changedInput('weekly')"></input>
                     </div>
                     <div class="input-error" id="memory-error">* Select Weekly.</div>
                 </div>                
-                <div class="col-md-5">
+                <div class="col-md-5 d-none">
                     <div class="modal-input">
                         <label>Year</label>
                         <select class="form-control" id="year" onchange="changedInput('year');"></select>
@@ -86,13 +86,13 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between">
-                <div class="modal-input">
+                <div class="modal-input d-none">
                     <label>Year Hours</label>
                     <div class="font-weight-bold" id="hours">0</div>
                 </div>
                 <div class="modal-input">
                     <label>Sub Total</label>
-                    <div class="font-weight-bold" id="price">$ 1000</div>
+                    <div class="font-weight-bold" id="price">$ 0.00</div>
                 </div>
                 <button type="button" class="btn btn-info" id="add-btn">Add VM</button>
             </div>
@@ -119,14 +119,14 @@
                     </div>
                     <div class="input-error" id="disk_count-error">* Select Disk Count.</div>
                 </div>    
-                <div class="col-md-5">
+                <div class="col-md-5 d-none">
                     <div class="modal-input">
                         <label>Weekly</label>
                         <input class="form-control" id="disk_weekly" value="30" type="number" onchange="changedInput('disk_weekly')"></input>
                     </div>
                     <div class="input-error" id="disk_weekly-error">* Select Weekly.</div>
                 </div>                
-                <div class="col-md-5">
+                <div class="col-md-5 d-none">
                     <div class="modal-input">
                         <label>Year</label>
                         <select class="form-control" id="disk_year" onchange="changedInput('disk_year');"></select>
@@ -143,7 +143,7 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between">
-                <div class="modal-input">
+                <div class="modal-input d-none">
                     <label>Year Hours</label>
                     <div class="font-weight-bold" id="disk_hours">0 hr</div>
                 </div>
@@ -170,11 +170,8 @@
                             <th scope="col" class="text-uppercase">Region</th>
                             <th scope="col" class="text-uppercase">CPU</th>
                             <th scope="col" class="text-uppercase">Memory</th>
-                            <th scope="col" class="text-uppercase">Year</th>
-                            <th scope="col" class="text-uppercase">1st</th>
-                            <th scope="col" class="text-uppercase">2nd</th>
-                            <th scope="col" class="text-uppercase">3rd</th>
                             <th scope="col" class="text-uppercase">Quantity</th>
+                            <th scope="col" class="text-uppercase">Discounted Price</th>
                             <th scope="col" class="text-uppercase">Price</th>
                         </tr>
                     </thead>
@@ -209,7 +206,6 @@
                         <tr>
                             <th scope="col" class="text-uppercase">Disk</th>
                             <th scope="col" class="text-uppercase">Size</th>
-                            <th scope="col" class="text-uppercase">Year</th>
                             <th scope="col" class="text-uppercase">Region</th>
                             <th scope="col" class="text-uppercase">Count</th>
                             <th scope="col" class="text-uppercase">Price</th>

@@ -135,9 +135,15 @@ function getSelectedDiskObject() {
     const disk_size = $('#disk_size').val();
     const disk_region = $('#disk_region').val();    
     const disk_weekly = $('#disk_weekly').val();    
-    const disk_year = $('#disk_year').val();    
+    const disk_year = $('#disk_year').val();
+    let disk_p = 0;
+    if(disk=="SSD"){
+        disk_p = 0.090;
+    }else{
+        disk_p = 0.020;
+    }
 
-    return {disk, disk_count, disk_size, disk_region, disk_weekly, disk_year};
+    return {disk, disk_count, disk_size, disk_region, disk_weekly, disk_year,disk_p};
 }
 
 // This function is used to initialize Region Select HTML DOM.
@@ -231,7 +237,7 @@ function initComponents () {
 // This function checks if you select all infos
 // Also validate the quantity of the carts.
 function validateInfo (info, show_error = false) {
-    const keys = ['cloud', 'size', 'cpu', 'memory', 'count', 'region', 'year'];    
+    const keys = ['cloud', 'size', 'cpu', 'memory', 'count', 'region'];    
     let flag = true;
     for (let i = 0; i < keys.length; i ++) {
         const key = keys[i];
@@ -255,7 +261,7 @@ function validateInfo (info, show_error = false) {
 
 function validateDiskInfo (info, show_error = false) {
     let flag = true;
-    const keys_disk = ['disk' ,'disk_count', 'disk_size', 'disk_region', 'disk_year'];
+    const keys_disk = ['disk' ,'disk_count', 'disk_size', 'disk_region'];
     for (let i = 0; i < keys_disk.length; i ++) {
         const key_disk = keys_disk[i];
         if((key_disk !== 'count' && info[key_disk]) || (key_disk === 'count' && info[key_disk] > 0)) {
@@ -272,7 +278,7 @@ function validateDiskInfo (info, show_error = false) {
 
 // Estimate the sub price for selected resources.
 function getPrice(info) {
-    let price = 0;
+    let price_data = {};
     let discount_price = ["-","-","-"] ;
     if (validateInfo(info)) {
         let idx = regions.indexOf(info.region);
@@ -286,43 +292,39 @@ function getPrice(info) {
         const obj = getVMObject(info.size);
 
         const year_hours = 52 * weekly;
-
-        price = 0;
         
+        let year_n = 0 ;
+        let cpu_yr = obj["CPU_yr"][year_n];
+        let memory_yr = obj["Memory_yr"][year_n];
 
-        for(let i=0; i<year; i++){
-            const year_n = i==2?1:0 ;
-            let cpu_yr = obj["CPU_yr"][year_n];
-            let memory_yr = obj["Memory_yr"][year_n];
+        let cpu_ct = obj["CPU_ct"][year_n];
+        let memory_ct = obj["Memory_ct"][year_n];
+        
+        if(cloud=="Onprem"){
+            cpu_yr = 0 ;
+            memory_yr = 0 ;
+        }    
+        
+        price_data.cpu_discount =(cpu_ct*8760*(100-cpu_yr)/100*info.count * (info.cpu_index+1)).toFixed(2);
+        price_data.cpu =(cpu_ct*8760*info.count * (info.cpu_index+1)).toFixed(2);
 
-            let cpu_ct = obj["CPU_ct"][year_n];
-            let memory_ct = obj["Memory_ct"][year_n];
-            if(cloud=="Onprem"){
-                cpu_yr = 0 ;
-                memory_yr = 0 ;
-            }    
-            
-            let year_price = cpu_ct*year_hours*(100-cpu_yr)/100 + memory_ct*year_hours*(100-memory_yr)/100 //((cpu * prices[cloud][idx].cpu) + (memory * prices[cloud][idx].memory) + (disk * prices[cloud][idx].disk)) * info.count;
-            year_price  = year_price*info.count * (info.cpu_index+1);
-            year_price = parseFloat(year_price.toFixed(2));
+        price_data.memory_discount =(memory_ct*8760*(100-memory_yr)/100*info.count * (info.cpu_index+1)).toFixed(2);
+        price_data.memory =(memory_ct*8760*info.count * (info.cpu_index+1)).toFixed(2);     
 
-            let year_discount = cpu_ct*year_hours*(cpu_yr)/100 + memory_ct*year_hours*(memory_yr)/100;
-            year_discount  = year_discount*info.count * (info.cpu_index+1);
-            discount_price[i]='$'+year_discount.toFixed(2) ;
-            price+= year_price;
-        }
-
+        price_data.total = parseFloat(price_data.cpu) + parseFloat(price_data.memory);
+        price_data.total_discount = parseFloat(price_data.cpu_discount) + parseFloat(price_data.memory_discount);        
+        
     }
-    return {price, discount_price};
+    return price_data;
 }
 
 // Update price HTML DOM which you can see on the website.Rafael H
 function updatePrice () {
     const info = getSelectedObject();
     const price = getPrice(info);
-    $('#price').html('$' + price.price.toFixed(2));
-    const yearly = info.weekly * 52*info.year;
-    $('#hours').html(yearly + "hr");
+    if(price.total_discount){
+        $('#price').html('$' + price.total_discount.toFixed(2));        
+    }
 }
 
 // This function is event trigger.
@@ -356,10 +358,8 @@ function changedInput(type) {
 function updateDiskPrice () {
     const info = getSelectedDiskObject();    
     if(validateDiskInfo(info)){
-        const price = parseInt(info.disk_count)*parseInt(info.disk_year)*parseInt(info.disk_weekly)*disk_price*52;
-        $('#disk_price').html('$' + price);    
-        const yearly = parseInt(info.disk_year)*parseInt(info.disk_weekly)*52;
-        $('#disk_hours').html(yearly + "hr");
+        const price = parseInt(info.disk_count)*info.disk_p* 8760*parseInt(info.disk_size.replace('G',''));
+        $('#disk_price').html('$' + price.toFixed(2));    
     }
 }
 
@@ -369,9 +369,6 @@ function updateDiskPrice () {
 // Generate HTML Code and replace DOM.
 function updateCarts() {
     let html = '';
-    let html_disk = '';
-    let total_disk_count = 0 ;
-    let total_dist_size = 0;
     for(let i = 0; i < carts.length; i ++) {
         const cart = carts[i];
         html += `<tr class="cart-item">
@@ -387,10 +384,6 @@ function updateCarts() {
         <td>${cart.region}</td>
         <td>${cart.cpu}</td>
         <td>${cart.memory}</td>
-        <td>${cart.year}</td>
-        <td>${cart.price.discount_price[0]}</td>
-        <td>${cart.price.discount_price[1]}</td>
-        <td>${cart.price.discount_price[2]}</td>
         <td>
             <div class="d-flex align-items-start justify-content-center">
                 <div class="decrease-count" onclick="decreaseCount(${cart.id})">-</div>
@@ -398,8 +391,9 @@ function updateCarts() {
                 <div class="increase-count" onclick="increaseCount(${cart.id})">+</div>
             </div>
         </td>
+        <td>$${cart.price.total_discount.toFixed(2)}</td>
         <td class="font-weight-bold close-container">
-            $${cart.price.price.toFixed(2)}
+            $${cart.price.total.toFixed(2)}
             <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
         </tr>`
@@ -409,7 +403,8 @@ function updateCarts() {
     }
     $('#carts').html(html);
     $('#total-count').html(carts.length);
-    $('#total-price').html('$' + carts.reduce((sum, itm) => sum + itm.price.price, 0).toFixed(2));
+    $('#total-price').html('$' +carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2)+"/ $"
+    + carts.reduce((sum, itm) => sum + parseFloat(itm.price.total), 0).toFixed(2));
 }
 
 function updateDisk() {
@@ -418,8 +413,8 @@ function updateDisk() {
     let total_dist_size = 0;
     for(let i = 0; i < disks.length; i ++) {
         const cart = disks[i];
-        total_disk_count += parseInt(cart.disk_count);
-        let disk_p = parseInt(cart.disk_count)*parseInt(cart.disk_year)*parseInt(cart.disk_weekly)*disk_price*52;
+        total_disk_count += parseInt(cart.disk_count); //parseInt(info.disk_count)**info.disk_p* 8760;
+        let disk_p = parseInt(cart.disk_count)*cart.disk_p* 8760*parseInt(cart.disk_size.replace('G',''));
         total_dist_size += disk_p;
         html_disk += `<tr class="cart-item">
         <td class="item">
@@ -434,20 +429,17 @@ function updateDisk() {
             ${cart.disk_size}
         </td>
         <td>
-            ${cart.disk_year}
-        </td>
-        <td>
             ${cart.disk_region}
         </td>
         <td>
-        <div class="d-flex align-items-start justify-content-center">
-            <div class="decrease-count" onclick="decreaseDiskCount(${cart.id})">-</div>
-            <div class="count">${cart.disk_count}</div>
-            <div class="increase-count" onclick="increaseDiskCount(${cart.id})">+</div>
-        </div>
+            <div class="d-flex align-items-start justify-content-center">
+                <div class="decrease-count" onclick="decreaseDiskCount(${cart.id})">-</div>
+                <div class="count">${cart.disk_count}</div>
+                <div class="increase-count" onclick="increaseDiskCount(${cart.id})">+</div>
+            </div>
         </td>
         <td class="font-weight-bold close-container">
-            $${disk_p}
+            $${disk_p.toFixed(2)}
             <div class="cart-remove close" onclick="removeDisk(${cart.id})">&times;</div>
         </td>
         </tr>`
@@ -457,7 +449,7 @@ function updateDisk() {
     }
     $('#disks').html(html_disk);
     $('#total-disk-count').html(total_disk_count);
-    $('#total-disk-price').html("$"+total_dist_size);
+    $('#total-disk-price').html("$"+total_dist_size.toFixed(2));
 
 }
 
