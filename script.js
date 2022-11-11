@@ -88,6 +88,9 @@ var cartId = 1;         // Unique ID (this is increased each time you add a cart
 var disks = [];
 var diskId = 1;
 
+var totalCartPrice = 0;
+var totalDiskPrice = 0;
+
 // Get Resource types by the given VM Size
 function getVMObject (size) {
     return vmObject[size];
@@ -364,6 +367,9 @@ function updateDiskPrice () {
 }
 
 
+function updateRealTotalPrice() {
+    $('#total-real-price').html('$' + (totalCartPrice + totalDiskPrice).toFixed(2))
+}
 
 // This function is used to update shopping cart table
 // Generate HTML Code and replace DOM.
@@ -404,8 +410,10 @@ function updateCarts() {
     $('#carts').html(html);
     $('#total-count').html(carts.length);
     $('#total-price').html('$'+carts.reduce((sum, itm) => sum + parseFloat(itm.price.total), 0).toFixed(2));
-    $('#total-price-discount').html('$' +carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2))
+    $('#total-price-discount').html('$' +carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2));
     
+    totalCartPrice = carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0);
+    updateRealTotalPrice();    
 }
 
 function updateDisk() {
@@ -451,7 +459,8 @@ function updateDisk() {
     $('#disks').html(html_disk);
     $('#total-disk-count').html(total_disk_count);
     $('#total-disk-price').html("$"+total_dist_size.toFixed(2));
-
+    totalDiskPrice = total_dist_size;
+    updateRealTotalPrice();
 }
 
 // This is event trigger.
