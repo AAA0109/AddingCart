@@ -33,7 +33,7 @@
                         <div>
                             <div class="form-check-inline" onclick="location.href='index.html'">
                                 <label class="form-check-label">
-                                  <input type="radio" checked class="form-check-input" name="optradio">On-prem
+                                  <input type="radio" class="form-check-input" name="optradio">On-prem
                                 </label>
                             </div>
                             <div class="form-check-inline" onclick="location.href='azure.html'">
@@ -43,7 +43,7 @@
                             </div>
                             <div class="form-check-inline" onclick="location.href='gcp.html'">
                                 <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="optradio">GCP
+                                  <input type="radio" checked class="form-check-input" name="optradio">GCP
                                 </label>
                             </div>
                             <div class="form-check-inline" onclick="location.href='aws.html'">
@@ -53,6 +53,20 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('region');">
+                        <label>Region</label>
+                        <select class="form-control" id="region"></select>
+                    </div>
+                    <div class="input-error" id="region-error">* Select Region.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('type');">
+                        <label>Type</label>
+                        <select class="form-control" id="type"></select>
+                    </div>
+                    <div class="input-error" id="type-error">* Select Type.</div>
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
@@ -67,13 +81,6 @@
                         <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
                     </div>
                     <div class="input-error" id="memory-error">* Select Memory.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input" onchange="changedInput('region');">
-                        <label>Region</label>
-                        <select class="form-control" id="region"></select>
-                    </div>
-                    <div class="input-error" id="region-error">* Select Region.</div>
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
@@ -93,6 +100,13 @@
             </div>
             <hr>
             <div class="row justify-content-between">
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Type</label>
+                        <select class="form-control" id="disk_type" onchange="changedInput('disk_type');"></select>
+                    </div>
+                    <div class="input-error" id="disk_type-error">* Select Type.</div>
+                </div>
                 <div class="col-md-5">
                     <div class="modal-input">
                         <label>Disk</label>
@@ -137,10 +151,12 @@
                         <tr>
                             <th scope="col" class="text-uppercase">Cloud Provider</th>
                             <th scope="col" class="text-uppercase">Region</th>
+                            <th scope="col" class="text-uppercase">Type</th>
                             <th scope="col" class="text-uppercase">CPU/Memory</th>
                             <th scope="col" class="text-uppercase">Quantity</th>
                             <th scope="col" class="text-uppercase">Year</th>
-                            <th scope="col" class="text-uppercase">Price</th>
+                            <th scope="col" class="text-uppercase">Discounted Price</th>
+                            <th scope="col" class="text-uppercase">Price Without Discount</th>
                         </tr>
                     </thead>
                     <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
@@ -157,8 +173,12 @@
             </div>
             <div class="d-flex flex-column justify-content-end align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Total</div>
+                    <div class="px-4">Total without Discount</div>
                     <div class="h5 font-weight-bold px-md-2" id="total-price">$0.00</div>
+                </div>
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total with discount:</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-price-discount">$0.00</div>
                 </div>
             </div>
         </div>
@@ -171,6 +191,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th scope="col" class="text-uppercase">Type</th>
                             <th scope="col" class="text-uppercase">Disk</th>
                             <th scope="col" class="text-uppercase">Region</th>
                             <th scope="col" class="text-uppercase">Size</th>
@@ -200,6 +221,7 @@
         <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="total-real-price">$0.00</div></div>
     </div>
     <!-- Main Content End -->
-<script src="onprem.js"></script>
+<script src="common.js"></script>
+<script src="gcp.js"></script>
 </body>
 </html>

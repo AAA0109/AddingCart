@@ -1,128 +1,974 @@
 // Resource types depend on VM Size
 var vmObject = [{
-    CPU: 1,
-    Memory: 4,
-    Disk: [
-        { label: '30GB Disk, 20GB Ephemeral disk', size: 50 },
-        { label: '20GB Disk, 10GB Ephemeral disk', size: 30 },
-    ]
+    region: 'US-Central',
+    types: [{
+        sku: 'N1 cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0199
+    }, {
+        sku: 'N1 cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0142
+    }, {
+        sku: 'N1 cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0027
+    }, {
+        sku: 'N1 cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0019
+    }, {
+        sku: 'N1 cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0332
+    }, {
+        sku: 'N1 cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0044
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0199
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0142
+    }, {
+        sku: 'N2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0027
+    }, {
+        sku: 'N2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0019
+    }, {
+        sku: 'N2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0332
+    }, {
+        sku: 'N2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0044
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0214
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0136
+    }, {
+        sku: 'C2 cost per RAM GB hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0029
+    }, {
+        sku: 'C2 cost per RAM GB hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0018
+    }, {
+        sku: 'C2 cost per vCPU, per Hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0340
+    }, {
+        sku: 'C2 cost per RAM GB hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0046
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0206
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0105
+    }, {
+        sku: 'M1 cost per RAM GB hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0030
+    }, {
+        sku: 'M1 cost per RAM GB hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0015
+    }, {
+        sku: 'M1 cost per vCPU, per Hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0348
+    }, {
+        sku: 'M1 cost per RAM GB hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0051
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0137
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0098
+    }, {
+        sku: 'E2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0018
+    }, {
+        sku: 'E2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0013
+    }, {
+        sku: 'E2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0218
+    }, {
+        sku: 'E2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0029
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0137
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0098
+    }, {
+        sku: 'T2D cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0018
+    }, {
+        sku: 'T2D cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0013
+    }, {
+        sku: 'T2D cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0218
+    }, {
+        sku: 'T2D cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0029
+    }]
 }, {
-    CPU: 2,
-    Memory: 8,
-    Disk: [
-        { label: '30GB Disk, 40GB Ephemeral disk', size: 70 },
-        { label: '20GB Disk, 30GB Ephemeral disk', size: 50 },
-        { label: '40GB Disk, 5GB Ephemeral disk', size: 45 },
-        { label: '50GB Disk, 0GB Ephemeral disk', size: 50 },
-    ]
+    region: 'US-West3',
+    types: [{
+        sku: 'N1 cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0239
+    }, {
+        sku: 'N1 cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0171
+    }, {
+        sku: 'N1 cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0032
+    }, {
+        sku: 'N1 cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0023
+    }, {
+        sku: 'N1 cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0380
+    }, {
+        sku: 'N1 cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0051
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0239
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0171
+    }, {
+        sku: 'N2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0032
+    }, {
+        sku: 'N2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0023
+    }, {
+        sku: 'N2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0380
+    }, {
+        sku: 'N2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0051
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0257
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0163
+    }, {
+        sku: 'C2 cost per RAM GB hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0034
+    }, {
+        sku: 'C2 cost per RAM GB hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0022
+    }, {
+        sku: 'C2 cost per vCPU, per Hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0408
+    }, {
+        sku: 'C2 cost per RAM GB hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0055
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0247
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0125
+    }, {
+        sku: 'M1 cost per RAM GB hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0036
+    }, {
+        sku: 'M1 cost per RAM GB hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0018
+    }, {
+        sku: 'M1 cost per vCPU, per Hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0399
+    }, {
+        sku: 'M1 cost per RAM GB hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0059
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0165
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0118
+    }, {
+        sku: 'E2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0022
+    }, {
+        sku: 'E2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0016
+    }, {
+        sku: 'E2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0262
+    }, {
+        sku: 'E2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0035
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0208
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0149
+    }, {
+        sku: 'T2D cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0028
+    }, {
+        sku: 'T2D cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0020
+    }, {
+        sku: 'T2D cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0330
+    }, {
+        sku: 'T2D cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0044
+    }]
 }, {
-    CPU: 4,
-    Memory: 16,
-    Disk: [
-        { label: '30GB Disk, 60GB Ephemeral disk', size: 90 },
-        { label: '20GB Disk, 50GB Ephemeral disk', size: 70 },
-        { label: '20GB Disk, 50GB Ephemeral disk', size: 70 },
-    ]
+    region: 'US-West4',
+    types: [{
+        sku: 'N1 cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0213
+    }, {
+        sku: 'N1 cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0152
+    }, {
+        sku: 'N1 cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0029
+    }, {
+        sku: 'N1 cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0020
+    }, {
+        sku: 'N1 cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0374
+    }, {
+        sku: 'N1 cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0050
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0213
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0152
+    }, {
+        sku: 'N2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0029
+    }, {
+        sku: 'N2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0020
+    }, {
+        sku: 'N2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0374
+    }, {
+        sku: 'N2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0050
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0229
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0175
+    }, {
+        sku: 'C2 cost per RAM GB hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0031
+    }, {
+        sku: 'C2 cost per RAM GB hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0021
+    }, {
+        sku: 'C2 cost per vCPU, per Hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0438
+    }, {
+        sku: 'C2 cost per RAM GB hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0051
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0232
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0118
+    }, {
+        sku: 'M1 cost per RAM GB hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0034
+    }, {
+        sku: 'M1 cost per RAM GB hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0017
+    }, {
+        sku: 'M1 cost per vCPU, per Hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0392
+    }, {
+        sku: 'M1 cost per RAM GB hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0058
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0155
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0111
+    }, {
+        sku: 'E2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0021
+    }, {
+        sku: 'E2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0015
+    }, {
+        sku: 'E2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0262
+    }, {
+        sku: 'E2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0033
+    }]
 }, {
-    CPU: 8,
-    Memory: 32,
-    Disk: [
-        { label: '30GB Disk, 100GB Ephemeral disk', size: 130 },
-        { label: '20GB Disk, 90GB Ephemeral disk', size: 110 },
-    ]
+    region: 'US-East1',
+    types: [{
+        sku: 'N1 cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0199
+    }, {
+        sku: 'N1 cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0142
+    }, {
+        sku: 'N1 cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0027
+    }, {
+        sku: 'N1 cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0019
+    }, {
+        sku: 'N1 cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0332
+    }, {
+        sku: 'N1 cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0044
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0199
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0142
+    }, {
+        sku: 'N2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0027
+    }, {
+        sku: 'N2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0019
+    }, {
+        sku: 'N2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0332
+    }, {
+        sku: 'N2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0044
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0214
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0136
+    }, {
+        sku: 'C2 cost per RAM GB hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0029
+    }, {
+        sku: 'C2 cost per RAM GB hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0018
+    }, {
+        sku: 'C2 cost per vCPU, per Hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0340
+    }, {
+        sku: 'C2 cost per RAM GB hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0046
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0206
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0105
+    }, {
+        sku: 'M1 cost per RAM GB hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0030
+    }, {
+        sku: 'M1 cost per RAM GB hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0015
+    }, {
+        sku: 'M1 cost per vCPU, per Hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0348
+    }, {
+        sku: 'M1 cost per RAM GB hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0051
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0137
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0098
+    }, {
+        sku: 'E2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0018
+    }, {
+        sku: 'E2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0013
+    }, {
+        sku: 'E2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0218
+    }, {
+        sku: 'E2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0029
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0173
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0124
+    }, {
+        sku: 'T2D cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0023
+    }, {
+        sku: 'T2D cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0017
+    }, {
+        sku: 'T2D cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0275
+    }, {
+        sku: 'T2D cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0037
+    }]
+}, {
+    region: 'US-West1',
+    types: [{
+        sku: 'N1 cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0199
+    }, {
+        sku: 'N1 cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0142
+    }, {
+        sku: 'N1 cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0027
+    }, {
+        sku: 'N1 cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0019
+    }, {
+        sku: 'N1 cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0332
+    }, {
+        sku: 'N1 cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0044
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0199
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0142
+    }, {
+        sku: 'N2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0027
+    }, {
+        sku: 'N2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0019
+    }, {
+        sku: 'N2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0332
+    }, {
+        sku: 'N2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0044
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0214
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0136
+    }, {
+        sku: 'C2 cost per RAM GB hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0029
+    }, {
+        sku: 'C2 cost per RAM GB hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0018
+    }, {
+        sku: 'C2 cost per vCPU, per Hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0340
+    }, {
+        sku: 'C2 cost per RAM GB hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0046
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0206
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0105
+    }, {
+        sku: 'M1 cost per RAM GB hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0030
+    }, {
+        sku: 'M1 cost per RAM GB hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0015
+    }, {
+        sku: 'M1 cost per vCPU, per Hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0348
+    }, {
+        sku: 'M1 cost per RAM GB hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0051
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0137
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0098
+    }, {
+        sku: 'E2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0018
+    }, {
+        sku: 'E2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0013
+    }, {
+        sku: 'E2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0218
+    }, {
+        sku: 'E2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0029
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0173
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0124
+    }, {
+        sku: 'T2D cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0023
+    }, {
+        sku: 'T2D cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0017
+    }, {
+        sku: 'T2D cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0275
+    }, {
+        sku: 'T2D cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0037
+    }]
+}, {
+    region: 'Europe-west3',
+    types: [{
+        sku: 'N1 cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0199
+    }, {
+        sku: 'N1 cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0142
+    }, {
+        sku: 'N1 cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0027
+    }, {
+        sku: 'N1 cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0019
+    }, {
+        sku: 'N1 cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0332
+    }, {
+        sku: 'N1 cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 7], [4, 15], [8, 30], [16, 60], [32, 120], [64, 240], [96, 360]],
+        price: 0.0044
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0199
+    }, {
+        sku: 'N2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0142
+    }, {
+        sku: 'N2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0027
+    }, {
+        sku: 'N2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0019
+    }, {
+        sku: 'N2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0332
+    }, {
+        sku: 'N2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [64, 156], [80, 320], [96, 384], [128, 512]],
+        price: 0.0044
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0214
+    }, {
+        sku: 'C2 cost per vCPU, per Hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0136
+    }, {
+        sku: 'C2 cost per RAM GB hour, 1-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0029
+    }, {
+        sku: 'C2 cost per RAM GB hour, 3-year',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0018
+    }, {
+        sku: 'C2 cost per vCPU, per Hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0340
+    }, {
+        sku: 'C2 cost per RAM GB hr, on-demand',
+        sizes: [[4, 16], [8, 32], [16, 64], [30, 120], [60, 240]],
+        price: 0.0046
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0206
+    }, {
+        sku: 'M1 cost per vCPU, per Hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0105
+    }, {
+        sku: 'M1 cost per RAM GB hour, 1-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0030
+    }, {
+        sku: 'M1 cost per RAM GB hour, 3-year',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0015
+    }, {
+        sku: 'M1 cost per vCPU, per Hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0348
+    }, {
+        sku: 'M1 cost per RAM GB hr, on-demand',
+        sizes: [[40, 961], [80, 1992], [96, 1434], [160, 3844]],
+        price: 0.0051
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0137
+    }, {
+        sku: 'E2 cost per vCPU, per Hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0098
+    }, {
+        sku: 'E2 cost per RAM GB hour, 1-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0018
+    }, {
+        sku: 'E2 cost per RAM GB hour, 3-year',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0013
+    }, {
+        sku: 'E2 cost per vCPU, per Hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0218
+    }, {
+        sku: 'E2 cost per RAM GB hr, on-demand',
+        sizes: [[2, 8], [4, 16], [8, 32], [16, 64], [32, 128]],
+        price: 0.0029
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0173
+    }, {
+        sku: 'T2D cost per vCPU, per Hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0124
+    }, {
+        sku: 'T2D cost per RAM GB hour, 1-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0023
+    }, {
+        sku: 'T2D cost per RAM GB hour, 3-year',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0017
+    }, {
+        sku: 'T2D cost per vCPU, per Hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0275
+    }, {
+        sku: 'T2D cost per RAM GB hr, on-demand',
+        sizes: [[1, 4], [2, 8], [4, 16], [8, 32], [16, 64], [32, 128], [48, 192], [60, 240]],
+        price: 0.0037
+    }]
 }];
 
-var years = [1, 2, 3];
-var regions = ['WJU', 'PHX'];                                     // Region types
-
-var carts = [];         // Saved Shopping Carts list
-var cartId = 1;         // Unique ID (this is increased each time you add a cart to shopping carts)
-
-var totalCartPrice = 0;
+var disk_types = ["HDD","SSD"];
+var disk_sizes = ["100G","150G","200G"] ;
 
 // Get Resource types by the given VM Size
 function getVMObject (size) {
     return vmObject[size];
 }
 
-// Generage Select Options
-// This function is used to initialize Select HTML Dom of Resources(Cloud, VM Size, CPU, Memory, Disk, Region).
-function generateOptionHTML(items) {
-    let html = '';
-    if (!items) return html;
-    for (let i = 0; i < items.length; i ++) {
-        const itm = items[i];
-        html += `<option value="${itm}">${itm}</option>`
-    }
-    return html;
-}
-
 // This function returns selected resources (Which Cpu type is selected, Which Disk type is selected, Which Cloud Provider ...)
 // return type is object.
 function getSelectedObject() {
-    const cloud = 'onprem';
+    const cloud = 'gcp';
     const region = $('#region').val();
+    const type = $('#type').val();
     const cpu = parseInt($('#cpu').val()) || 0;
     const memory = parseInt($('#memory').val()) || 0;
-    const disk = parseInt($('#disk').val()) || 0;
     const count = parseInt($('#count').val()) || 0;
     const year = 1;
+    let price_per_hr = 0;
+    if (region && type) price_per_hr = vmObject.find(itm => itm.region === region).types.find(itm => itm.sku === type).price;
 
-    return { cloud, count, cpu, memory, disk, region, year };
+    return { cloud, count, cpu, type, memory, disk, region, year, price_per_hr };
 }
 
 function getSelectedDiskObject() {
-    const cloud = 'onprem';
     const region = $('#disk_region').val();
+    const type = $('#disk_type').val();
     const disk = parseInt($('#disk').val()) || 0;
     const count = parseInt($('#disk_count').val()) || 0;
     const year = 1;
-    
-    const disk_dom = document.getElementById('disk');
-    const label = disk_dom.options[disk_dom.selectedIndex].text;
 
-    return { cloud, label, count, disk, region, year };
+    return { type, count, disk, region, year };
 }
 
 // This function is used to initialize Region Select HTML DOM.
 function initRegion() {
-    let html = '<option value="">Select Region</option>' + generateOptionHTML(regions);
+    let html = '<option value="">Select Region</option>' + generateOptionHTML(vmObject.map(obj => obj.region));
     $('#region').html(html);
     $('#disk_region').html(html);
+    initType();
+}
+
+function initType() {
+    const region = $('#region').val();
+    const obj = vmObject.find(obj => obj.region === region);
+    let html = '<option value="">Select Region first</option>';
+    if (obj) {
+        html = '<option value="">Select Type</option>'
+        for (let i = 0; i < obj.types.length; i ++) {
+            const type = obj.types[i].sku;
+            html += `<option value="${type}">${type} Cores</option>`;
+        }    
+    }
+    $('#type').html(html);
+    initCPU();
 }
 
 function initCPU() {
-    let html = '<option value="">Select CPU</option>';
-    for (let i = 0; i < vmObject.length; i ++) {
-        const cpu = vmObject[i].CPU;
-        html += `<option value="${cpu}">${cpu} Cores</option>`;
+    const region = $('#region').val();
+    const obj = vmObject.find(obj => obj.region === region);
+    let html = '<option value="">Select Region first</option>';
+    if (obj) {
+        html = '<option value="">Select Type first</option>';
+        const type = $('#type').val();
+        const s_obj = obj.types.find(itm => itm.sku === type);
+        if (s_obj) {
+            html = '<option value="">Select CPU</option>';
+            for (let i = 0; i < s_obj.sizes.length; i ++) {
+                const cpu = s_obj.sizes[i][0];
+                html += `<option value="${cpu}">${cpu} Cores</option>`;
+            }
+        }
     }
     $('#cpu').html(html);
     initMemory();
 }
 
 function initMemory() {
-    const cpu = $('#cpu').val();
-    const obj = vmObject.find(itm => itm.CPU == cpu);
-    let html = `<option value="">Select CPU first</option>`;
-    if(obj) {
-        html = '<option value="">Select Memory</option>';
-        html += `<option value="${obj.Memory}">${obj.Memory} GB</option>`;
+    const region = $('#region').val();
+    const obj = vmObject.find(obj => obj.region === region);
+    let html = '<option value="">Select Region first</option>';
+    if (obj) {
+        html = '<option value="">Select Type first</option>';
+        const type = $('#type').val();
+        const s_obj = obj.types.find(itm => itm.sku === type);
+        if(s_obj) {
+            html = '<option value="">Select CPU first</option>';
+            const cpu = $('#cpu').val();
+            const obj = s_obj.sizes.find(itm => itm[0] == cpu);
+            if(obj) {
+                html = '<option value="">Select Memory</option>';
+                html += `<option value="${obj[1]}">${obj[1]} GB</option>`;
+            }
+        }
     }
     $('#memory').html(html);
-    initDisk();
 }
 
 function initDisk() {
-    const cpu = $('#cpu').val();
-    const obj = vmObject.find(itm => itm.CPU == cpu);
-    let html = `<option value="">Select CPU first</option>`;
-    if(obj) {
-        html = '<option value="">Select Disk</option>';
-        for (let i = 0; i < obj.Disk.length; i ++) {
-            const disk = obj.Disk[i];
-            html += `<option value="${disk.size}">${disk.label}</option>`;
-        }
+    let html = `<option value="">Select Type</option>`;
+    for (let i = 0; i < disk_types.length; i ++) {
+        const type = disk_types[i];
+        html += `<option value="${type}">${type}</option>`;
+    }
+    $('#disk_type').html(html);
+
+    html = `<option value="">Select Size</option>`;
+    for (let i = 0; i < disk_sizes.length; i ++) {
+        const size = disk_sizes[i];
+        html += `<option value="${size}">${size} GB</option>`;
     }
     $('#disk').html(html);
 }
@@ -131,13 +977,13 @@ function initDisk() {
 // This function is used to initialize Recourses Select HTML DOM (CPU, Memory, Disk)
 function initComponents () {
     initRegion();
-    initCPU();
+    initDisk();
 }
 
 // This function checks if you select all infos
 // Also validate the quantity of the carts.
 function validateInfo (info, show_error = false) {
-    const keys = ['cloud', 'cpu', 'memory', 'count', 'region'];    
+    const keys = ['cloud', 'cpu', 'memory', 'count', 'region', 'type'];
     let flag = true;
     for (let i = 0; i < keys.length; i ++) {
         const key = keys[i];
@@ -154,7 +1000,7 @@ function validateInfo (info, show_error = false) {
 }
 
 function validateDiskInfo (info, show_error = false) {
-    const keys = ['disk', 'count', 'region'];    
+    const keys = ['disk', 'type', 'count', 'region'];    
     let flag = true;
     for (let i = 0; i < keys.length; i ++) {
         const key = keys[i];
@@ -174,12 +1020,16 @@ function validateDiskInfo (info, show_error = false) {
 
 // Estimate the sub price for selected resources.
 function getPrice(info) {
-    let price = 0;
+    let price = {
+        total: 0,
+        total_discount: 0
+    };
     if (validateInfo(info)) {
         const cpu = parseFloat(info.cpu) || 0;
         const year = info.year;
                 
-        price = (0.0667 * cpu * year * 8760) * info.count;
+        price.total = (info.price_per_hr * cpu * year * 8760) * info.count;
+        price.total_discount = price.total * 0.525;
     }
     return price;
 }
@@ -196,23 +1046,14 @@ function getDiskPrice(info) {
     return price;
 }
 
+
 // Update price HTML DOM which you can see on the website.
 function updatePrice () {
     const info = getSelectedObject();
     const price = getPrice(info);
     console.log(info, price);
-    if(price){
-        $('#price').html('$' + price.toFixed(2) + ' / year');
-    }
-}
-
-// Update price HTML DOM which you can see on the website.
-function updateDiskPrice () {
-    const info = getSelectedDiskObject();
-    const price = getDiskPrice(info);
-    console.log(info, price);
-    if(price){
-        $('#disk_price').html('$' + price.toFixed(2) + ' / year');
+    if(price.total){
+        $('#price').html('$' + (price.total).toFixed(2) + ' / year');
     }
 }
 
@@ -224,12 +1065,15 @@ function changedInput(type) {
     else $('#' + type + '-error').removeClass('show');
 
     switch (type) {
+        case 'region':
+            initType();
+            break;
+        case 'type':
+            initCPU();
+            break;
         case 'cpu':
             initMemory();
             break;
-        case 'memory':
-            initDisk();
-            break;    
     }
     updatePrice();
     updateDiskPrice();
@@ -239,7 +1083,7 @@ function changedInput(type) {
 // Generate HTML Code and replace DOM.
 function updateCarts() {
     let html = '';
-    const _carts = carts.filter(cart => cart.type === 'shopping')
+    const _carts = carts.filter(cart => cart.cart === 'shopping')
     for(let i = 0; i < _carts.length; i ++) {
         const cart = _carts[i];
         html += `<tr class="cart-item">
@@ -252,6 +1096,7 @@ function updateCarts() {
             </div>
         </td>
         <td>${cart.region}</td>
+        <td>${cart.type}</td>
         <td>${cart.cpu} Cores / ${cart.memory}GB</td>
         <td>
             <div class="d-flex align-items-start justify-content-center">
@@ -267,8 +1112,9 @@ function updateCarts() {
                 <div class="increase-count" onclick="increaseYear(${cart.id})">+</div>
             </div>
         </td>
+        <td>$${cart.price.total_discount.toFixed(2)}</td>
         <td class="font-weight-bold close-container">
-            $${cart.price.toFixed(2)}
+            $${cart.price.total.toFixed(2)}
             <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
         </td>
         </tr>`
@@ -278,20 +1124,21 @@ function updateCarts() {
     }
     $('#carts').html(html);
     $('#total-count').html(_carts.length);
-    $('#total-price').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price), 0).toFixed(2));
+    $('#total-price').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price.total), 0).toFixed(2));
+    $('#total-price-discount').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2));
 
     updateRealTotalPrice();
 }
 
 function updateDiskCarts() {
     let html = '';
-    const _carts = carts.filter(cart => cart.type === 'disk');
+    const _carts = carts.filter(cart => cart.cart === 'disk');
     for(let i = 0; i < _carts.length; i ++) {
         const cart = _carts[i];
         html += `<tr class="cart-item">
-        <td>${cart.label}</td>
+        <td>${cart.type}</td>
         <td>${cart.disk}GB</td>
-        <td>${cart.region}GB</td>
+        <td>${cart.region}</td>
         <td>
             <div class="d-flex align-items-start justify-content-center">
                 <div class="decrease-count" onclick="decreaseCount(${cart.id})">-</div>
@@ -323,96 +1170,7 @@ function updateDiskCarts() {
 }
 
 function updateRealTotalPrice() {
-    $('#total-real-price').html('$' + carts.reduce((sum, itm) => sum + parseFloat(itm.price), 0).toFixed(2))
-}
-
-// This is event trigger.
-// Called when you click remove button
-function removeCart(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
-    if (idx > -1) carts.splice(idx, 1);
-    updateCarts();
-    updateDiskCarts();
-    return false;
-}
-
-// Increate button clicked
-function increaseCount(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
-    if (idx === -1) return -1;
-    carts[idx].count ++;
-    if (carts[idx].type === 'shopping') carts[idx].price = getPrice(carts[idx]);
-    if (carts[idx].type === 'disk') carts[idx].price = getDiskPrice(carts[idx]);
-    updateCarts();
-    updateDiskCarts();
-    return false;
-}
-
-// Decrease button clicked
-function decreaseYear(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
-    if (idx === -1 || carts[idx].year <= 1) return -1;
-    carts[idx].year --;
-    if (carts[idx].type === 'shopping') carts[idx].price = getPrice(carts[idx]);
-    if (carts[idx].type === 'disk') carts[idx].price = getDiskPrice(carts[idx]);
-    updateCarts();
-    updateDiskCarts();
-    return false;
-}
-
-// Increate button clicked
-function increaseYear(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
-    if (idx === -1 || carts[idx].year >= 3) return -1;
-    carts[idx].year ++;
-    if (carts[idx].type === 'shopping') carts[idx].price = getPrice(carts[idx]);
-    if (carts[idx].type === 'disk') carts[idx].price = getDiskPrice(carts[idx]);
-    updateCarts();
-    updateDiskCarts();
-    return false;
-}
-
-// Decrease button clicked
-function decreaseCount(id) {
-    const idx = carts.findIndex(itm => itm.id == id);
-    if (idx === -1 || carts[idx].count <= 0) return -1;
-    carts[idx].count --;
-    if (carts[idx].type === 'shopping') carts[idx].price = getPrice(carts[idx]);
-    if (carts[idx].type === 'disk') carts[idx].price = getDiskPrice(carts[idx]);
-    updateCarts();
-    updateDiskCarts();
-    return false;
-}
-
-// Add Cart button clicked
-function addBtnClicked() {
-    const info = getSelectedObject();
-    if (!validateInfo(info, true)) return;
-    const price = getPrice(info);
-    
-    carts.push({
-        id: cartId ++,
-        price,
-        type: 'shopping',
-        ...info
-    });
-
-    updateCarts();
-}
-
-function addDiskBtnClicked() {
-    const info = getSelectedDiskObject();
-    if (!validateDiskInfo(info, true)) return;
-    const price = getDiskPrice(info);
-    
-    carts.push({
-        id: cartId ++,
-        price,
-        type: 'disk',
-        ...info
-    });
-
-    updateDiskCarts();
+    $('#total-real-price').html('$' + carts.reduce((sum, itm) => sum + (parseFloat(itm.price.total_discount) || parseFloat(itm.price)), 0).toFixed(2));
 }
 
 // Initializing function
