@@ -77,18 +77,17 @@ async function _getRetailPrices(filterString, currencyCode) {
     let retailPrices = [];
     // eslint-disable-next-line no-constant-condition
     while (true) {
+        debugger
         console.log(url);
-        const res = await fetch(url, {
-          method: 'GET',
-          mode: 'no-cors'
-        });
+        const res = await fetch('https://cors-anywhere.herokuapp.com/' + url);
         console.log(res)
 
         if (!res.ok) {
           throw new Error(`${res.status} ${res.statusText}`);
         }
 
-        const response = res.json();
+        const response = await res.json();
+        console.log(response)
 
         retailPrices = retailPrices.concat(response.Items);
         if (response.NextPageLink) {
