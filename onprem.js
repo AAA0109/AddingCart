@@ -34,11 +34,6 @@ var vmObject = [{
 
 var regions = ['WJU', 'PHX'];                                     // Region types
 
-// Get Resource types by the given VM Size
-function getVMObject (size) {
-    return vmObject[size];
-}
-
 // This function returns selected resources (Which Cpu type is selected, Which Disk type is selected, Which Cloud Provider ...)
 // return type is object.
 function getSelectedObject() {
@@ -49,7 +44,7 @@ function getSelectedObject() {
     const count = parseInt($('#count').val()) || 0;
     const year = 1;
 
-    return { cloud, count, cpu, memory, disk, region, year };
+    return { cloud, count, cpu, memory, region, year };
 }
 
 function getSelectedDiskObject() {

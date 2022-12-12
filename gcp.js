@@ -862,11 +862,6 @@ var vmObject = [{
 var disk_types = ["HDD","SSD"];
 var disk_sizes = ["100G","150G","200G"] ;
 
-// Get Resource types by the given VM Size
-function getVMObject (size) {
-    return vmObject[size];
-}
-
 // This function returns selected resources (Which Cpu type is selected, Which Disk type is selected, Which Cloud Provider ...)
 // return type is object.
 function getSelectedObject() {
@@ -880,7 +875,7 @@ function getSelectedObject() {
     let price_per_hr = 0;
     if (region && type) price_per_hr = vmObject.find(itm => itm.region === region).types.find(itm => itm.sku === type).price;
 
-    return { cloud, count, cpu, type, memory, disk, region, year, price_per_hr };
+    return { cloud, count, cpu, type, memory, region, year, price_per_hr };
 }
 
 function getSelectedDiskObject() {
