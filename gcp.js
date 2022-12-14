@@ -859,8 +859,13 @@ var vmObject = [{
     }]
 }];
 
-var disk_types = ["HDD","SSD"];
-var disk_sizes = ["100G","150G","200G"] ;
+var disk_types = [{
+    type: "HDD",
+    price: 0.02
+}, {
+    type: "SSD",
+    price: 0.09
+}];
 
 // This function returns selected resources (Which Cpu type is selected, Which Disk type is selected, Which Cloud Provider ...)
 // return type is object.
@@ -955,17 +960,10 @@ function initMemory() {
 function initDisk() {
     let html = `<option value="">Select Type</option>`;
     for (let i = 0; i < disk_types.length; i ++) {
-        const type = disk_types[i];
+        const type = disk_types[i].type;
         html += `<option value="${type}">${type}</option>`;
     }
     $('#disk_type').html(html);
-
-    html = `<option value="">Select Size</option>`;
-    for (let i = 0; i < disk_sizes.length; i ++) {
-        const size = disk_sizes[i];
-        html += `<option value="${size}">${size} GB</option>`;
-    }
-    $('#disk').html(html);
 }
 
 
@@ -1001,7 +999,7 @@ function validateDiskInfo (info, show_error = false) {
         const key = keys[i];
         let id = key;
         if (id !== 'disk') id = 'disk_' + id;
-        if((key !== 'count' && info[key]) || (key === 'count' && info[key] > 0)) {
+        if((key !== 'count' && key !== 'disk' && info[key]) || ((key === 'count' || key === 'disk') && info[key] > 0)) {
             $('#' + id + '-error').removeClass('show');
         }
         else {
@@ -1035,8 +1033,10 @@ function getDiskPrice(info) {
     if (validateDiskInfo(info)) {
         const disk = parseFloat(info.disk) || 0;
         const year = info.year;
+        const type = info.type;
+        const price_hr = disk_types.find(itm => itm.type === type).price;
                 
-        price = (0.0667 * disk * year * 8760) * info.count;
+        price = (price_hr * disk * year * 8760) * info.count;
     }
     return price;
 }

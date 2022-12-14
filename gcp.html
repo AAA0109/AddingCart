@@ -109,8 +109,8 @@
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
-                        <label>Disk</label>
-                        <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
+                        <label>Disk Size (GB)</label>
+                        <input type="number" value="1" class="form-control" min="1" step="1" id="disk" onchange="changedInput('disk')" />
                     </div>
                     <div class="input-error" id="disk-error">* Select Disk.</div>
                 </div>
@@ -194,8 +194,8 @@
                             <th scope="col" class="text-uppercase">Type</th>
                             <th scope="col" class="text-uppercase">Disk</th>
                             <th scope="col" class="text-uppercase">Region</th>
-                            <th scope="col" class="text-uppercase">Size</th>
                             <th scope="col" class="text-uppercase">Count</th>
+                            <th scope="col" class="text-uppercase">Year</th>
                             <th scope="col" class="text-uppercase">Price</th>
                         </tr>
                     </thead>
