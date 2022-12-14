@@ -1,19 +1,19 @@
 const API = 'http://localhost:7285/api/'
 // Resource types depend on VM Size
-var vmObject = [{ sku: 'Standard_D2s_v4', cpu: 2, memory: 8 }, 
-  { sku: 'Standard_D4s_v4', cpu: 4, memory: 16 },
-  { sku: 'Standard_D8s_v4', cpu: 8, memory: 32 },
-  { sku: 'Standard_D16s_v4', cpu: 16, memory: 64 },
-  { sku: 'Standard_E2s_v4', cpu: 2, memory: 16 },
-  { sku: 'Standard_E4s_v4', cpu: 4, memory: 32 },
-  { sku: 'Standard_E8s_v4', cpu: 8, memory: 64 },
-  { sku: 'Standard_E16s_v4', cpu: 16, memory: 128 },
-  { sku: 'Standard_F2s_v2', cpu: 2, memory: 4 },
-  { sku: 'Standard_F4s_v4', cpu: 4, memory: 8 },
-  { sku: 'Standard_F8s_v4', cpu: 8, memory: 16 },
-  { sku: 'Standard_F16s_v4', cpu: 16, memory: 32 },
-  { sku: 'Standard_A1_v2', cpu: 1, memory: 2 },
-  { sku: 'Standard_B1s', cpu: 1, memory: 1 }];
+var vmObject = [{ type: 'General Purpose', sku: 'Standard_D2s_v4', cpu: 2, memory: 8 }, 
+  { type: 'General Purpose', sku: 'Standard_D4s_v4', cpu: 4, memory: 16 },
+  { type: 'General Purpose', sku: 'Standard_D8s_v4', cpu: 8, memory: 32 },
+  { type: 'General Purpose', sku: 'Standard_D16s_v4', cpu: 16, memory: 64 },
+  { type: 'Memory Optimized', sku: 'Standard_E2s_v4', cpu: 2, memory: 16 },
+  { type: 'Memory Optimized', sku: 'Standard_E4s_v4', cpu: 4, memory: 32 },
+  { type: 'Memory Optimized', sku: 'Standard_E8s_v4', cpu: 8, memory: 64 },
+  { type: 'Memory Optimized', sku: 'Standard_E16s_v4', cpu: 16, memory: 128 },
+  { type: 'Compute Optimized', sku: 'Standard_F2s_v2', cpu: 2, memory: 4 },
+  { type: 'Compute Optimized', sku: 'Standard_F4s_v4', cpu: 4, memory: 8 },
+  { type: 'Compute Optimized', sku: 'Standard_F8s_v4', cpu: 8, memory: 16 },
+  { type: 'Compute Optimized', sku: 'Standard_F16s_v4', cpu: 16, memory: 32 },
+  { type: 'General Purpose - Test  / Dev / Entry Level', sku: 'Standard_A1_v2', cpu: 1, memory: 2 },
+  { type: 'General Purpose - Test  / Dev / Entry Level', sku: 'Standard_B1s', cpu: 1, memory: 1 }];
 var regions = [{region: 'West US2', key: 'westus2'}, {region: 'Central US', key: 'centralus'}, {region: 'North Europe', key: 'northeurope'}, {region: 'Germany West Central', key: 'germanywestcentral'}, {region: 'South India', key: 'southindia'}];
 var disks = [{
   type: 'Ultra',
@@ -111,18 +111,19 @@ let priceRes = [];
 // This function returns selected resources (Which Cpu type is selected, Which Disk type is selected, Which Cloud Provider ...)
 // return type is object.
 function getSelectedObject() {
-  const _type = priceRes[$('#type').val()] || '';
+  const _sku = priceRes[$('#sku').val()] || '';
   const cloud = 'azure';
   const region = $('#region').val();
-  const type = _type.armSkuName;
+  const type = $('#type').val();
+  const sku = _sku.armSkuName;
   const cpu = parseInt($('#cpu').val()) || 0;
   const memory = parseInt($('#memory').val()) || 0;
   const count = parseInt($('#count').val()) || 0;
   const year = 1;
   let price_per_hr = 0;
-  if (region && type && _type) price_per_hr = _type.unitPrice;
+  if (region && sku && _sku) price_per_hr = _sku.unitPrice;
 
-  return { cloud, count, cpu, type, memory, region, year, price_per_hr };
+  return { cloud, count, cpu, type, sku, memory, region, year, price_per_hr };
 }
 
 function getSelectedDiskObject() {
@@ -146,17 +147,23 @@ function initRegion() {
   let html = '<option value="">Select Region</option>' + generateOptionHTML(regions.map(obj => obj.region));
   $('#region').html(html);
   $('#disk_region').html(html);
-  initType();
 }
 
-async function regionChanged() {
+async function getPriceRes() {
   const region = $('#region').val();
-  if (!region) return;
+  const type = $('#type').val();
+  if (!region || !type) {
+    priceRes = [];
+    initSku();
+    return;
+  }
   const key = regions.find(itm => itm.region === region).key;
+  const priceType = (type === 'General Purpose - Test  / Dev / Entry Level') ? 'DevTestConsumption' : 'Consumption';
+  const skus = vmObject.filter(itm => itm.type === type).map(obj => obj.sku);
   $.ajax({
-    url: API + 'getRetailPrices',
+    url: API + 'getRetailPricesWithSku',
     method: 'POST',
-    data: { filter: { armRegionName: key, serviceName: "Virtual Machines", priceType: "Reservation" }}
+    data: { filter: { armRegionName: key, serviceName: "Virtual Machines", priceType }, skus}
   })
     .done(function(msg) {
       console.log(msg);
@@ -166,7 +173,7 @@ async function regionChanged() {
           if (idx === -1) return false;
           return true;
         });
-        initType();
+        initSku();
       }
     })
   // const res = await fetch(API + 'getRetailPrices', {
@@ -176,25 +183,45 @@ async function regionChanged() {
   // console.log(res.json());
 }
 
+function getTypes () {
+  const types = vmObject.map(itm => itm.type);
+  return types.filter((itm, idx) => types.indexOf(itm) === idx);
+}
+
 function initType() {
+  let html = '<option value="">Select Type</option>'
+  const types = getTypes();
+  for (let i = 0; i < types.length; i ++) {
+      const type = types[i];
+      html += `<option value="${type}">${type}</option>`;
+  }
+  $('#type').html(html);
+  initSku();
+}
+
+function initSku() {
   const region = $('#region').val();
   let html = '<option value="">Select Region first</option>';
   if (region) {
-      html = '<option value="">Select Type</option>'
+    const type = $('#type').val();
+    html = '<option value="">Select Type first</option>';
+    if (type) {
+      html = '<option value="">Select Sku</option>'
       for (let i = 0; i < priceRes.length; i ++) {
-          const type = priceRes[i].armSkuName;
-          html += `<option value="${i}">${type} Cores</option>`;
-      }    
+          const sku = priceRes[i].armSkuName;
+          html += `<option value="${i}">${sku}</option>`;
+      }
+    }
   }
-  $('#type').html(html);
+  $('#sku').html(html);
   initCPU();
   initMemory();
 }
 
 function initCPU() {
-  const type = (priceRes[$('#type').val()] || '').armSkuName;
-  let html = '<option value="">Select Type first</option>';
-  const s_obj = vmObject.find(itm => itm.sku === type);
+  const sku = (priceRes[$('#sku').val()] || '').armSkuName;
+  let html = '<option value="">Select Sku first</option>';
+  const s_obj = vmObject.find(itm => itm.sku === sku);
   if (s_obj) {
       html = '<option value="">Select CPU</option>';
       html += `<option value="${s_obj.cpu}">${s_obj.cpu}</option>`;
@@ -203,9 +230,9 @@ function initCPU() {
 }
 
 function initMemory() {
-  const type = (priceRes[$('#type').val()] || '').armSkuName;
-  let html = '<option value="">Select Type first</option>';
-  const s_obj = vmObject.find(itm => itm.sku === type);
+  const sku = (priceRes[$('#sku').val()] || '').armSkuName;
+  let html = '<option value="">Select Sku first</option>';
+  const s_obj = vmObject.find(itm => itm.sku === sku);
   if (s_obj) {
       html = '<option value="">Select Memory</option>';
       html += `<option value="${s_obj.memory}">${s_obj.memory}</option>`;
@@ -242,13 +269,14 @@ function initDisk() {
 // This function is used to initialize Recourses Select HTML DOM (CPU, Memory, Disk)
 function initComponents () {
   initRegion();
+  initType();
   initDiskType();
 }
 
 // This function checks if you select all infos
 // Also validate the quantity of the carts.
 function validateInfo (info, show_error = false) {
-  const keys = ['cloud', 'cpu', 'memory', 'count', 'region', 'type'];
+  const keys = ['cloud', 'type', 'cpu', 'memory', 'count', 'region', 'sku'];
   let flag = true;
   for (let i = 0; i < keys.length; i ++) {
       const key = keys[i];
@@ -331,9 +359,12 @@ async function changedInput(type) {
 
   switch (type) {
     case 'region':
-      await regionChanged();
+      await getPriceRes();
       break;
     case 'type':
+      await getPriceRes();
+      break;
+    case 'sku':
       initCPU();
       initMemory();
       break;
@@ -363,6 +394,7 @@ function updateCarts() {
       </td>
       <td>${cart.region}</td>
       <td>${cart.type}</td>
+      <td>${cart.sku}</td>
       <td>${cart.cpu} Cores / ${cart.memory}GB</td>
       <td>
           <div class="d-flex align-items-start justify-content-center">
