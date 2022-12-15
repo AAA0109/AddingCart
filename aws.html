@@ -1,0 +1,234 @@
+<!doctype html> 
+<html lang="en">
+<head>
+    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css" type="text/css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+    <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Price Estimator</title>   
+</head>
+
+<body>
+    <!-- Backgruond Mask Begin -->
+    <div class="background-mask"></div>
+    <!-- Background Mask End -->
+    <!-- Main Banner Begin -->
+    <div class="banner">
+        <img src="./img/banner.jpg" />
+    </div>
+    <!-- Main Banner End -->
+    <!-- Main Content Begin -->
+    <div class="wrapper">
+        <!-- Adding Cart Content Begin -->
+        <div class="h3">VM Cost Estimator</div>
+        <div>
+            <hr>
+            <div class="row justify-content-between">
+                <div class="col-md-12">
+                    <div class="modal-input">
+                        <label>Cloud Provider</label>
+                        <div>
+                            <div class="form-check-inline" onclick="location.href='index.html'">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="optradio">On-prem
+                                </label>
+                            </div>
+                            <div class="form-check-inline" onclick="location.href='azure.html'">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="optradio">Azure
+                                </label>
+                            </div>
+                            <div class="form-check-inline" onclick="location.href='gcp.html'">
+                                <label class="form-check-label">
+                                  <input type="radio" class="form-check-input" name="optradio">GCP
+                                </label>
+                            </div>
+                            <div class="form-check-inline" onclick="location.href='aws.html'">
+                                <label class="form-check-label">
+                                  <input type="radio" checked class="form-check-input" name="optradio">AWS
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('region');">
+                        <label>Region</label>
+                        <select class="form-control" id="region"></select>
+                    </div>
+                    <div class="input-error" id="region-error">* Select Region.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('type');">
+                        <label>Type</label>
+                        <select class="form-control" id="type"></select>
+                    </div>
+                    <div class="input-error" id="type-error">* Select Type.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('sku');">
+                        <label>Sku</label>
+                        <select class="form-control" id="sku"></select>
+                    </div>
+                    <div class="input-error" id="sku-error">* Select Sku.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>CPU</label>
+                        <select class="form-control" id="cpu" onchange="changedInput('cpu');"></select>
+                    </div>
+                    <div class="input-error" id="cpu-error">* Select CPU.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Memory</label>
+                        <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
+                    </div>
+                    <div class="input-error" id="memory-error">* Select Memory.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>VM Count</label>
+                        <input type="number" value="1" class="form-control" min="1" step="1" id="count" onchange="changedInput('count')" />
+                    </div>
+                    <div class="input-error" id="count-error">* Input correct count.</div>
+                </div>    
+            </div>
+            <hr>
+            <div class="d-flex justify-content-between">
+                <div class="modal-input">
+                    <label>Sub Total</label>
+                    <div class="font-weight-bold" id="price">$ 0.00</div>
+                </div>
+                <button type="button" class="btn btn-info" id="add-btn">Add VM</button>
+            </div>
+            <hr>
+            <div class="row justify-content-between">
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Type</label>
+                        <select class="form-control" id="disk_type" onchange="changedInput('disk_type');"></select>
+                    </div>
+                    <div class="input-error" id="disk_type-error">* Select Type.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Disk</label>
+                        <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
+                    </div>
+                    <div class="input-error" id="disk-error">* Select Disk.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input" onchange="changedInput('disk_region');">
+                        <label>Region</label>
+                        <select class="form-control" id="disk_region"></select>
+                    </div>
+                    <div class="input-error" id="disk_region-error">* Select Region.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Disk Count</label>
+                        <input type="number" value="1" class="form-control" min="1" step="1" id="disk_count" onchange="changedInput('disk_count')" />
+                    </div>
+                    <div class="input-error" id="disk_count-error">* Input correct Count.</div>
+                </div>
+            </div>
+            <hr>
+                <div class="d-flex justify-content-between">
+                    <div class="modal-input">
+                        <label>Sub Total</label>
+                        <div class="font-weight-bold" id="disk_price">$ 0.00</div>
+                    </div>
+                    <button type="button" class="btn btn-info" id="add-disk-btn">Add Disk</button>
+                </div>
+            <hr>
+        </div>
+        <!-- Adding Cart Content End -->
+        <!-- Shopping Cart Table Begin -->
+        <div class="h3 mt-5">Shopping Cart</div>
+        <div id="table" class="bg-white rounded">
+            <hr>
+            <hr class="items">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-uppercase">Cloud Provider</th>
+                            <th scope="col" class="text-uppercase">Region</th>
+                            <th scope="col" class="text-uppercase">Type</th>
+                            <th scope="col" class="text-uppercase">CPU/Memory</th>
+                            <th scope="col" class="text-uppercase">Quantity</th>
+                            <th scope="col" class="text-uppercase">Year</th>
+                            <th scope="col" class="text-uppercase">Discounted Price</th>
+                            <th scope="col" class="text-uppercase">Price Without Discount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column justify-content-start align-items-end">
+                <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                    <div class="px-4">Items</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-count">1</div>
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-end align-items-end">
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total without Discount</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-price">$0.00</div>
+                </div>
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total with discount:</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-price-discount">$0.00</div>
+                </div>
+            </div>
+        </div>
+        <!-- Shopping Cart Table End -->
+        <div class="h3 mt-5">Disk Carts</div>
+        <div id="table" class="bg-white rounded">
+            <hr>
+            <hr class="items">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="text-uppercase">Type</th>
+                            <th scope="col" class="text-uppercase">Disk</th>
+                            <th scope="col" class="text-uppercase">Region</th>
+                            <th scope="col" class="text-uppercase">Size</th>
+                            <th scope="col" class="text-uppercase">Count</th>
+                            <th scope="col" class="text-uppercase">Price</th>
+                        </tr>
+                    </thead>
+                    <tbody id="disk_carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+            <div class="d-flex flex-column justify-content-start align-items-end">
+                <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                    <div class="px-4">Items</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-disk-count">0</div>
+                </div>
+            </div>
+            <div class="d-flex flex-column justify-content-end align-items-end">
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-disk-price">$0.00</div>
+                </div>
+            </div>
+        </div>
+        <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="total-real-price">$0.00</div></div>
+    </div>
+    <!-- Main Content End -->
+<script src="common.js"></script>
+<script src="aws.js"></script>
+</body>
+</html>

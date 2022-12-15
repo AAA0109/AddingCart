@@ -166,7 +166,7 @@ function getDiskPrice(info) {
         const disk = parseFloat(info.disk) || 0;
         const year = info.year;
                 
-        price = (0.0667 * disk * year * 8760) * info.count;
+        price = (0.0007 * disk * year * 8760) * info.count;
     }
     return price;
 }

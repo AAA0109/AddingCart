@@ -1,20 +1,21 @@
 const API = 'http://localhost:7285/api/'
 // Resource types depend on VM Size
-var vmObject = [{ type: 'General Purpose', sku: 'Standard_D2s_v4', cpu: 2, memory: 8 }, 
-  { type: 'General Purpose', sku: 'Standard_D4s_v4', cpu: 4, memory: 16 },
-  { type: 'General Purpose', sku: 'Standard_D8s_v4', cpu: 8, memory: 32 },
-  { type: 'General Purpose', sku: 'Standard_D16s_v4', cpu: 16, memory: 64 },
-  { type: 'Memory Optimized', sku: 'Standard_E2s_v4', cpu: 2, memory: 16 },
-  { type: 'Memory Optimized', sku: 'Standard_E4s_v4', cpu: 4, memory: 32 },
-  { type: 'Memory Optimized', sku: 'Standard_E8s_v4', cpu: 8, memory: 64 },
-  { type: 'Memory Optimized', sku: 'Standard_E16s_v4', cpu: 16, memory: 128 },
-  { type: 'Compute Optimized', sku: 'Standard_F2s_v2', cpu: 2, memory: 4 },
-  { type: 'Compute Optimized', sku: 'Standard_F4s_v4', cpu: 4, memory: 8 },
-  { type: 'Compute Optimized', sku: 'Standard_F8s_v4', cpu: 8, memory: 16 },
-  { type: 'Compute Optimized', sku: 'Standard_F16s_v4', cpu: 16, memory: 32 },
-  { type: 'General Purpose - Test  / Dev / Entry Level', sku: 'Standard_A1_v2', cpu: 1, memory: 2 },
-  { type: 'General Purpose - Test  / Dev / Entry Level', sku: 'Standard_B1s', cpu: 1, memory: 1 }];
-var regions = [{region: 'West US2', key: 'westus2'}, {region: 'Central US', key: 'centralus'}, {region: 'North Europe', key: 'northeurope'}, {region: 'Germany West Central', key: 'germanywestcentral'}, {region: 'South India', key: 'southindia'}];
+var vmObject = [{ type: 'General Purpose', sku: 'm4.large', cpu: 2, memory: 8 }, 
+  { type: 'General Purpose', sku: 'm4.xlarge', cpu: 4, memory: 16 },
+  { type: 'General Purpose', sku: 'm4.2xlarge', cpu: 8, memory: 32 },
+  { type: 'General Purpose', sku: 'm4.4xlarge', cpu: 16, memory: 64 },
+  { type: 'General Purpose', sku: 'm4.10xlarge', cpu: 40, memory: 160 },
+  { type: 'General Purpose', sku: 'm4.16xlarge', cpu: 64, memory: 256 },
+  { type: 'Memory Optimized', sku: 'c4.large', cpu: 2, memory: 3.75 },
+  { type: 'Memory Optimized', sku: 'c4.xlarge', cpu: 4, memory: 7.5 },
+  { type: 'Memory Optimized', sku: 'c4.2xlarge', cpu: 8, memory: 15 },
+  { type: 'Memory Optimized', sku: 'c4.4xlarge', cpu: 16, memory: 30 },
+  { type: 'Memory Optimized', sku: 'c4.8xlarge', cpu: 36, memory: 60 },
+  { type: 'Compute Optimized', sku: 'r5.large', cpu: 2, memory: 16 },
+  { type: 'Compute Optimized', sku: 'r5.xlarge', cpu: 4, memory: 32 },
+  { type: 'Compute Optimized', sku: 'r5.2xlarge', cpu: 8, memory: 64 },
+  { type: 'Compute Optimized', sku: 'r5.4xlarge', cpu: 16, memory: 128 }];
+var regions = [{region: 'US West', key: 'westus'}, {region: 'US East', key: 'eastus'}];
 var disks = [{
   type: 'Ultra',
   sizes: [
@@ -134,7 +135,7 @@ function getSelectedDiskObject() {
   let price_per_month = 0;
   if (region && type && disk) {
     let obj = disks.find(itm => itm.type === type);
-    if (obj.price) price_per_month = obj.price * disk;
+    if (obj.price) price_per_month = obj.price;
     else price_per_month = obj.sizes.find(itm => itm.size == disk).price;
   }
   const year = 1;
@@ -334,7 +335,7 @@ function getDiskPrice(info) {
       const disk = parseFloat(info.disk) || 0;
       const year = info.year;
               
-      price = (year * 12 * info.price_per_month) * info.count;
+      price = (disk * year * 12 * info.price_per_month) * info.count;
   }
   return price;
 }
