@@ -873,8 +873,8 @@ function getSelectedObject() {
     const cloud = 'gcp';
     const region = $('#region').val();
     const type = $('#type').val();
-    const cpu = parseInt($('#cpu').val()) || 0;
-    const memory = parseInt($('#memory').val()) || 0;
+    const cpu = parseFloat($('#cpu').val()) || 0;
+    const memory = parseFloat($('#memory').val()) || 0;
     const count = parseInt($('#count').val()) || 0;
     const year = 1;
     let price_per_hr = 0;
@@ -886,7 +886,7 @@ function getSelectedObject() {
 function getSelectedDiskObject() {
     const region = $('#disk_region').val();
     const type = $('#disk_type').val();
-    const disk = parseInt($('#disk').val()) || 0;
+    const disk = parseFloat($('#disk').val()) || 0;
     const count = parseInt($('#disk_count').val()) || 0;
     const year = 1;
 

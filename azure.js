@@ -1,19 +1,23 @@
 const API = 'http://localhost:7285/api/'
 // Resource types depend on VM Size
-var vmObject = [{ type: 'General Purpose', sku: 'Standard_D2s_v4', cpu: 2, memory: 8 }, 
-  { type: 'General Purpose', sku: 'Standard_D4s_v4', cpu: 4, memory: 16 },
-  { type: 'General Purpose', sku: 'Standard_D8s_v4', cpu: 8, memory: 32 },
-  { type: 'General Purpose', sku: 'Standard_D16s_v4', cpu: 16, memory: 64 },
-  { type: 'Memory Optimized', sku: 'Standard_E2s_v4', cpu: 2, memory: 16 },
-  { type: 'Memory Optimized', sku: 'Standard_E4s_v4', cpu: 4, memory: 32 },
-  { type: 'Memory Optimized', sku: 'Standard_E8s_v4', cpu: 8, memory: 64 },
-  { type: 'Memory Optimized', sku: 'Standard_E16s_v4', cpu: 16, memory: 128 },
-  { type: 'Compute Optimized', sku: 'Standard_F2s_v2', cpu: 2, memory: 4 },
-  { type: 'Compute Optimized', sku: 'Standard_F4s_v4', cpu: 4, memory: 8 },
-  { type: 'Compute Optimized', sku: 'Standard_F8s_v4', cpu: 8, memory: 16 },
-  { type: 'Compute Optimized', sku: 'Standard_F16s_v4', cpu: 16, memory: 32 },
-  { type: 'General Purpose - Test  / Dev / Entry Level', sku: 'Standard_A1_v2', cpu: 1, memory: 2 },
-  { type: 'General Purpose - Test  / Dev / Entry Level', sku: 'Standard_B1s', cpu: 1, memory: 1 }];
+var vmObject = [{ type: 'General Purpose', skuName: 'D2s v4', sku: 'Standard_D2s_v4', cpu: 2, memory: 8 }, 
+  { type: 'General Purpose', skuName: 'D4s v4', sku: 'Standard_D4s_v4', cpu: 4, memory: 16 },
+  { type: 'General Purpose', skuName: 'D8s v4', sku: 'Standard_D8s_v4', cpu: 8, memory: 32 },
+  { type: 'General Purpose', skuName: 'D16s v4', sku: 'Standard_D16s_v4', cpu: 16, memory: 64 },
+  { type: 'Memory Optimized', skuName: 'E2s v4', sku: 'Standard_E2s_v4', cpu: 2, memory: 16 },
+  { type: 'Memory Optimized', skuName: 'E4s v4', sku: 'Standard_E4s_v4', cpu: 4, memory: 32 },
+  { type: 'Memory Optimized', skuName: 'E8s v4', sku: 'Standard_E8s_v4', cpu: 8, memory: 64 },
+  { type: 'Memory Optimized', skuName: 'E16s v4', sku: 'Standard_E16s_v4', cpu: 16, memory: 128 },
+  { type: 'Compute Optimized', skuName: 'F2s v2', sku: 'Standard_F2s_v2', cpu: 2, memory: 4 },
+  { type: 'Compute Optimized', skuName: 'F4s v2', sku: 'Standard_F4s_v2', cpu: 4, memory: 8 },
+  { type: 'Compute Optimized', skuName: 'F8s v2', sku: 'Standard_F8s_v2', cpu: 8, memory: 16 },
+  { type: 'Compute Optimized', skuName: 'F16s v2', sku: 'Standard_F16s_v2', cpu: 16, memory: 32 },
+  { type: 'General Purpose - Test  / Dev / Entry Level', skuName: 'A1 v2', sku: 'Standard_A1_v2', cpu: 1, memory: 2 },
+  { type: 'General Purpose - Test  / Dev / Entry Level', skuName: 'B1s', sku: 'Standard_B1s', cpu: 1, memory: 1 },
+  { type: 'General Purpose - Test  / Dev / Entry Level', skuName: 'D2s v4', sku: 'Standard_D2s_v4', cpu: 2, memory: 8 }, 
+  { type: 'General Purpose - Test  / Dev / Entry Level', skuName: 'D4s v4', sku: 'Standard_D4s_v4', cpu: 4, memory: 16 },
+  { type: 'General Purpose - Test  / Dev / Entry Level', skuName: 'D8s v4', sku: 'Standard_D8s_v4', cpu: 8, memory: 32 },
+  { type: 'General Purpose - Test  / Dev / Entry Level', skuName: 'D16s v4', sku: 'Standard_D16s_v4', cpu: 16, memory: 64 }];
 var regions = [{region: 'West US2', key: 'westus2'}, {region: 'Central US', key: 'centralus'}, {region: 'North Europe', key: 'northeurope'}, {region: 'Germany West Central', key: 'germanywestcentral'}, {region: 'South India', key: 'southindia'}];
 var disks = [{
   type: 'Ultra',
@@ -116,8 +120,8 @@ function getSelectedObject() {
   const region = $('#region').val();
   const type = $('#type').val();
   const sku = _sku.armSkuName;
-  const cpu = parseInt($('#cpu').val()) || 0;
-  const memory = parseInt($('#memory').val()) || 0;
+  const cpu = parseFloat($('#cpu').val()) || 0;
+  const memory = parseFloat($('#memory').val()) || 0;
   const count = parseInt($('#count').val()) || 0;
   const year = 1;
   let price_per_hr = 0;
@@ -129,7 +133,7 @@ function getSelectedObject() {
 function getSelectedDiskObject() {
   const region = $('#disk_region').val();
   const type = $('#disk_type').val();
-  const disk = parseInt($('#disk').val()) || 0;
+  const disk = parseFloat($('#disk').val()) || 0;
   const count = parseInt($('#disk_count').val()) || 0;
   let price_per_month = 0;
   if (region && type && disk) {
@@ -166,13 +170,21 @@ async function getPriceRes() {
     data: { filter: { armRegionName: key, serviceName: "Virtual Machines", priceType }, skus}
   })
     .done(function(msg) {
-      console.log(msg);
+      console.log('Not reservation', msg);
       if (msg.success) {
         priceRes = msg.data.filter(itm => {
-          const idx = vmObject.findIndex(obj => obj.sku === itm.armSkuName);
+          const idx = vmObject.findIndex(obj => obj.sku === itm.armSkuName && obj.skuName === itm.skuName);
           if (idx === -1) return false;
           return true;
         });
+        console.log('mid result', priceRes);
+        priceRes = priceRes.filter(itm => {
+          const ct = priceRes.filter(ii => ii.armSkuName === itm.armSkuName).length;
+          if (ct === 1) return true;
+          if (!itm.productName.endsWith('Series')) return false;
+          return true;
+        })
+        console.log('result', priceRes);
         initSku();
       }
     })
@@ -322,19 +334,22 @@ function getPrice(info) {
       const year = info.year;
               
       price.total = (info.price_per_hr * cpu * year * 8760) * info.count;
-      price.total_discount = price.total * 0.525;
+      price.total_discount = price.total * 0.84;
   }
   return price;
 }
 
 // Estimate the sub price for selected resources.
 function getDiskPrice(info) {
-  let price = 0;
+  let price = {
+    total: 0,
+    total_discount: 0
+  };
   if (validateDiskInfo(info)) {
-      const disk = parseFloat(info.disk) || 0;
       const year = info.year;
               
-      price = (year * 12 * info.price_per_month) * info.count;
+      price.total = (year * 12 * info.price_per_month) * info.count;
+      price.total_discount = price.total * 0.84;
   }
   return price;
 }
@@ -347,6 +362,15 @@ function updatePrice () {
   console.log(info, price);
   if(price.total){
       $('#price').html('$' + (price.total).toFixed(2) + ' / year');
+  }
+}
+
+function updateDiskPrice () {
+  const info = getSelectedDiskObject();
+  const price = getDiskPrice(info);
+  console.log(info, price);
+  if(price){
+      $('#disk_price').html('$' + price.total.toFixed(2) + ' / year');
   }
 }
 
@@ -451,8 +475,9 @@ function updateDiskCarts() {
               <div class="increase-count" onclick="increaseYear(${cart.id})">+</div>
           </div>
       </td>
+      <td>$${cart.price.total_discount.toFixed(2)}</td>
       <td class="font-weight-bold close-container">
-          $${cart.price.toFixed(2)}
+          $${cart.price.total.toFixed(2)}
           <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
       </td>
       </tr>`
@@ -462,7 +487,8 @@ function updateDiskCarts() {
   }
   $('#disk_carts').html(html);
   $('#total-disk-count').html(_carts.length);
-  $('#total-disk-price').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price), 0).toFixed(2));
+  $('#total-disk-price').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price.total), 0).toFixed(2));
+  $('#total-disk-price-discount').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2));
   
   updateRealTotalPrice();
 }

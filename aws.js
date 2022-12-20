@@ -1,21 +1,22 @@
 const API = 'http://localhost:7285/api/'
 // Resource types depend on VM Size
-var vmObject = [{ type: 'General Purpose', sku: 'm4.large', cpu: 2, memory: 8 }, 
-  { type: 'General Purpose', sku: 'm4.xlarge', cpu: 4, memory: 16 },
-  { type: 'General Purpose', sku: 'm4.2xlarge', cpu: 8, memory: 32 },
-  { type: 'General Purpose', sku: 'm4.4xlarge', cpu: 16, memory: 64 },
-  { type: 'General Purpose', sku: 'm4.10xlarge', cpu: 40, memory: 160 },
-  { type: 'General Purpose', sku: 'm4.16xlarge', cpu: 64, memory: 256 },
-  { type: 'Memory Optimized', sku: 'c4.large', cpu: 2, memory: 3.75 },
-  { type: 'Memory Optimized', sku: 'c4.xlarge', cpu: 4, memory: 7.5 },
-  { type: 'Memory Optimized', sku: 'c4.2xlarge', cpu: 8, memory: 15 },
-  { type: 'Memory Optimized', sku: 'c4.4xlarge', cpu: 16, memory: 30 },
-  { type: 'Memory Optimized', sku: 'c4.8xlarge', cpu: 36, memory: 60 },
-  { type: 'Compute Optimized', sku: 'r5.large', cpu: 2, memory: 16 },
-  { type: 'Compute Optimized', sku: 'r5.xlarge', cpu: 4, memory: 32 },
-  { type: 'Compute Optimized', sku: 'r5.2xlarge', cpu: 8, memory: 64 },
-  { type: 'Compute Optimized', sku: 'r5.4xlarge', cpu: 16, memory: 128 }];
-var regions = [{region: 'US West', key: 'westus'}, {region: 'US East', key: 'eastus'}];
+var vmObject = [{ type: 'General purpose', sku: 'm4.large', cpu: 2, memory: 8 }, 
+  { type: 'General purpose', sku: 'm4.xlarge', cpu: 4, memory: 16 },
+  { type: 'General purpose', sku: 'm4.2xlarge', cpu: 8, memory: 32 },
+  { type: 'General purpose', sku: 'm4.4xlarge', cpu: 16, memory: 64 },
+  { type: 'General purpose', sku: 'm4.10xlarge', cpu: 40, memory: 160 },
+  { type: 'General purpose', sku: 'm4.16xlarge', cpu: 64, memory: 256 },
+  { type: 'Memory optimized', sku: 'c4.large', cpu: 2, memory: 3.75 },
+  { type: 'Memory optimized', sku: 'c4.xlarge', cpu: 4, memory: 7.5 },
+  { type: 'Memory optimized', sku: 'c4.2xlarge', cpu: 8, memory: 15 },
+  { type: 'Memory optimized', sku: 'c4.4xlarge', cpu: 16, memory: 30 },
+  { type: 'Memory optimized', sku: 'c4.8xlarge', cpu: 36, memory: 60 },
+  { type: 'Compute optimized', sku: 'r5.large', cpu: 2, memory: 16 },
+  { type: 'Compute optimized', sku: 'r5.xlarge', cpu: 4, memory: 32 },
+  { type: 'Compute optimized', sku: 'r5.2xlarge', cpu: 8, memory: 64 },
+  { type: 'Compute optimized', sku: 'r5.4xlarge', cpu: 16, memory: 128 }];
+var regions = [{region: 'US West', key: 'west'}, {region: 'US East', key: 'east'}];
+var priceRes = {};
 var disks = [{
   type: 'Ultra',
   sizes: [
@@ -107,22 +108,29 @@ var disks = [{
   ]
 }];
 
-let priceRes = [];
-
 // This function returns selected resources (Which Cpu type is selected, Which Disk type is selected, Which Cloud Provider ...)
 // return type is object.
 function getSelectedObject() {
-  const _sku = priceRes[$('#sku').val()] || '';
   const cloud = 'azure';
   const region = $('#region').val();
+  const _sku = region ? priceRes[region][$('#sku').val()] || '' : '';
   const type = $('#type').val();
-  const sku = _sku.armSkuName;
-  const cpu = parseInt($('#cpu').val()) || 0;
-  const memory = parseInt($('#memory').val()) || 0;
+  const sku = (_sku.attributes || '').instanceType;
+  const cpu = parseFloat($('#cpu').val()) || 0;
+  const memory = parseFloat($('#memory').val()) || 0;
   const count = parseInt($('#count').val()) || 0;
   const year = 1;
   let price_per_hr = 0;
-  if (region && sku && _sku) price_per_hr = _sku.unitPrice;
+  if (region && sku && _sku) {
+    const term = _sku.term;
+    const term_keys = Object.keys(term);
+    if (term_keys.length) {
+      const t = term[term_keys[0]].priceDimensions;
+      const t_keys = Object.keys(t);
+      if (t_keys.length)
+        price_per_hr = parseFloat(t[t_keys[0]].pricePerUnit.USD) || 0;
+    }
+  }
 
   return { cloud, count, cpu, type, sku, memory, region, year, price_per_hr };
 }
@@ -130,7 +138,7 @@ function getSelectedObject() {
 function getSelectedDiskObject() {
   const region = $('#disk_region').val();
   const type = $('#disk_type').val();
-  const disk = parseInt($('#disk').val()) || 0;
+  const disk = parseFloat($('#disk').val()) || 0;
   const count = parseInt($('#disk_count').val()) || 0;
   let price_per_month = 0;
   if (region && type && disk) {
@@ -150,38 +158,19 @@ function initRegion() {
   $('#disk_region').html(html);
 }
 
-async function getPriceRes() {
-  const region = $('#region').val();
-  const type = $('#type').val();
-  if (!region || !type) {
-    priceRes = [];
-    initSku();
-    return;
-  }
-  const key = regions.find(itm => itm.region === region).key;
-  const priceType = (type === 'General Purpose - Test  / Dev / Entry Level') ? 'DevTestConsumption' : 'Consumption';
-  const skus = vmObject.filter(itm => itm.type === type).map(obj => obj.sku);
-  $.ajax({
-    url: API + 'getRetailPricesWithSku',
-    method: 'POST',
-    data: { filter: { armRegionName: key, serviceName: "Virtual Machines", priceType }, skus}
-  })
-    .done(function(msg) {
-      console.log(msg);
-      if (msg.success) {
-        priceRes = msg.data.filter(itm => {
-          const idx = vmObject.findIndex(obj => obj.sku === itm.armSkuName);
-          if (idx === -1) return false;
-          return true;
-        });
-        initSku();
-      }
+function initPrices () {
+  for (let i = 1; i < regions.length; i ++) {
+    $.ajax({
+      url: API + 'getAWSPrice',
+      method: 'POST'
     })
-  // const res = await fetch(API + 'getRetailPrices', {
-  //   method: 'POST',
-  //   body: JSON.stringify({ filter: { location: key }})
-  // });
-  // console.log(res.json());
+      .done(function(msg) {
+        console.log('response', msg);
+        if (msg.success) {
+          priceRes = msg.data;
+        }
+      })
+  }
 }
 
 function getTypes () {
@@ -208,9 +197,10 @@ function initSku() {
     html = '<option value="">Select Type first</option>';
     if (type) {
       html = '<option value="">Select Sku</option>'
-      for (let i = 0; i < priceRes.length; i ++) {
-          const sku = priceRes[i].armSkuName;
-          html += `<option value="${i}">${sku}</option>`;
+      for (let i = 0; i < priceRes[region].length; i ++) {
+          const p = priceRes[region][i];
+          if (vmObject.findIndex(itm => itm.sku === p.attributes.instanceType && itm.type === type) === -1) continue;
+          html += `<option value="${i}">${p.attributes.instanceType}</option>`;
       }
     }
   }
@@ -220,7 +210,10 @@ function initSku() {
 }
 
 function initCPU() {
-  const sku = (priceRes[$('#sku').val()] || '').armSkuName;
+  const sku_c = priceRes[$('#region').val()] || '';
+  const p = sku_c[$('#sku').val()] || '';
+  let sku = '';
+  if (p && p.attributes) sku = p.attributes.instanceType;
   let html = '<option value="">Select Sku first</option>';
   const s_obj = vmObject.find(itm => itm.sku === sku);
   if (s_obj) {
@@ -231,7 +224,10 @@ function initCPU() {
 }
 
 function initMemory() {
-  const sku = (priceRes[$('#sku').val()] || '').armSkuName;
+  const sku_c = priceRes[$('#region').val()] || '';
+  const p = sku_c[$('#sku').val()] || '';
+  let sku = '';
+  if (p && p.attributes) sku = p.attributes.instanceType;
   let html = '<option value="">Select Sku first</option>';
   const s_obj = vmObject.find(itm => itm.sku === sku);
   if (s_obj) {
@@ -323,19 +319,22 @@ function getPrice(info) {
       const year = info.year;
               
       price.total = (info.price_per_hr * cpu * year * 8760) * info.count;
-      price.total_discount = price.total * 0.525;
+      price.total_discount = price.total * 0.84;
   }
   return price;
 }
 
 // Estimate the sub price for selected resources.
 function getDiskPrice(info) {
-  let price = 0;
+  let price = {
+    total: 0,
+    total_discount: 0
+  };
   if (validateDiskInfo(info)) {
-      const disk = parseFloat(info.disk) || 0;
       const year = info.year;
               
-      price = (disk * year * 12 * info.price_per_month) * info.count;
+      price.total = (year * 12 * info.price_per_month) * info.count;
+      price.total_discount = price.total * 0.84;
   }
   return price;
 }
@@ -351,6 +350,15 @@ function updatePrice () {
   }
 }
 
+function updateDiskPrice () {
+  const info = getSelectedDiskObject();
+  const price = getDiskPrice(info);
+  console.log(info, price);
+  if(price){
+      $('#disk_price').html('$' + price.total.toFixed(2) + ' / year');
+  }
+}
+
 // This function is event trigger.
 // This is handled when any resource type changed (Cloud, VM Size, CPU, Memory, Disk, Count)
 async function changedInput(type) {
@@ -360,10 +368,9 @@ async function changedInput(type) {
 
   switch (type) {
     case 'region':
-      await getPriceRes();
       break;
     case 'type':
-      await getPriceRes();
+      initSku();
       break;
     case 'sku':
       initCPU();
@@ -452,8 +459,9 @@ function updateDiskCarts() {
               <div class="increase-count" onclick="increaseYear(${cart.id})">+</div>
           </div>
       </td>
+      <td>$${cart.price.total_discount.toFixed(2)}</td>
       <td class="font-weight-bold close-container">
-          $${cart.price.toFixed(2)}
+          $${cart.price.total.toFixed(2)}
           <div class="cart-remove close" onclick="removeCart(${cart.id})">&times;</div>
       </td>
       </tr>`
@@ -463,7 +471,8 @@ function updateDiskCarts() {
   }
   $('#disk_carts').html(html);
   $('#total-disk-count').html(_carts.length);
-  $('#total-disk-price').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price), 0).toFixed(2));
+  $('#total-disk-price').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price.total), 0).toFixed(2));
+  $('#total-disk-price-discount').html('$'+_carts.reduce((sum, itm) => sum + parseFloat(itm.price.total_discount), 0).toFixed(2));
   
   updateRealTotalPrice();
 }
@@ -478,6 +487,7 @@ $(function() {
   $('#add-btn').click(() => addBtnClicked());
   $('#add-disk-btn').click(() => addDiskBtnClicked());
   
+  initPrices();
   initComponents();
 
   updatePrice();

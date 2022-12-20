@@ -203,7 +203,8 @@
                             <th scope="col" class="text-uppercase">Region</th>
                             <th scope="col" class="text-uppercase">Size</th>
                             <th scope="col" class="text-uppercase">Count</th>
-                            <th scope="col" class="text-uppercase">Price</th>
+                            <th scope="col" class="text-uppercase">Discounted Price</th>
+                            <th scope="col" class="text-uppercase">Price Without Discount</th>
                         </tr>
                     </thead>
                     <tbody id="disk_carts"> <!-- Main Table Content (Will be updated with javascript) -->
@@ -220,8 +221,12 @@
             </div>
             <div class="d-flex flex-column justify-content-end align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Total</div>
+                    <div class="px-4">Total without discount:</div>
                     <div class="h5 font-weight-bold px-md-2" id="total-disk-price">$0.00</div>
+                </div>
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total with discount:</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-disk-price-discount">$0.00</div>
                 </div>
             </div>
         </div>

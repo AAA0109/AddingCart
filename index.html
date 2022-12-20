@@ -27,32 +27,19 @@
         <div>
             <hr>
             <div class="row justify-content-between">
-                <div class="col-md-12">
+                <div class="col-md-5">
                     <div class="modal-input">
                         <label>Cloud Provider</label>
-                        <div>
-                            <div class="form-check-inline" onclick="location.href='index.html'">
-                                <label class="form-check-label">
-                                  <input type="radio" checked class="form-check-input" name="optradio">On-prem
-                                </label>
-                            </div>
-                            <div class="form-check-inline" onclick="location.href='azure.html'">
-                                <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="optradio">Azure
-                                </label>
-                            </div>
-                            <div class="form-check-inline" onclick="location.href='gcp.html'">
-                                <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="optradio">GCP
-                                </label>
-                            </div>
-                            <div class="form-check-inline" onclick="location.href='aws.html'">
-                                <label class="form-check-label">
-                                  <input type="radio" class="form-check-input" name="optradio">AWS
-                                </label>
-                            </div>
-                        </div>
+                        <select class="form-control" id="cloud" onchange="changedInput('cloud');"></select>
                     </div>
+                    <div class="input-error" id="cloud-error">* Select Cloud Provider.</div>
+                </div>
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>VM Size</label>
+                        <select class="form-control" id="size" onchange="changedInput('size');"></select>
+                    </div>
+                    <div class="input-error" id="size-error">* Select VM Size.</div>
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input">
@@ -66,7 +53,21 @@
                         <label>Memory</label>
                         <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
                     </div>
-                    <div class="input-error" id="memory-error">* Select Memory.</div>
+                    <div class="input-error" id="cpu-error">* Select CPU.</div>
+                </div>
+                <div class="col-md-5 d-none">
+                    <div class="modal-input">
+                        <label>Weekly</label>
+                        <input class="form-control" id="weekly" value="30" type="number" onchange="changedInput('weekly')"></input>
+                    </div>
+                    <div class="input-error" id="memory-error">* Select Weekly.</div>
+                </div>                
+                <div class="col-md-5 d-none">
+                    <div class="modal-input">
+                        <label>Year</label>
+                        <select class="form-control" id="year" onchange="changedInput('year');"></select>
+                    </div>
+                    <div class="input-error" id="year-error">* Select Year.</div>
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input" onchange="changedInput('region');">
@@ -85,6 +86,10 @@
             </div>
             <hr>
             <div class="d-flex justify-content-between">
+                <div class="modal-input d-none">
+                    <label>Year Hours</label>
+                    <div class="font-weight-bold" id="hours">0</div>
+                </div>
                 <div class="modal-input">
                     <label>Sub Total</label>
                     <div class="font-weight-bold" id="price">$ 0.00</div>
@@ -99,6 +104,34 @@
                         <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
                     </div>
                     <div class="input-error" id="disk-error">* Select Disk.</div>
+                </div> 
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Size</label>
+                        <select class="form-control" id="disk_size" onchange="changedInput('disk_size');"></select>
+                    </div>
+                    <div class="input-error" id="disk_size-error">* Select Disk Size.</div>
+                </div> 
+                <div class="col-md-5">
+                    <div class="modal-input">
+                        <label>Count</label>
+                        <select class="form-control" id="disk_count" onchange="changedInput('disk_count');"></select>
+                    </div>
+                    <div class="input-error" id="disk_count-error">* Select Disk Count.</div>
+                </div>    
+                <div class="col-md-5 d-none">
+                    <div class="modal-input">
+                        <label>Weekly</label>
+                        <input class="form-control" id="disk_weekly" value="30" type="number" onchange="changedInput('disk_weekly')"></input>
+                    </div>
+                    <div class="input-error" id="disk_weekly-error">* Select Weekly.</div>
+                </div>                
+                <div class="col-md-5 d-none">
+                    <div class="modal-input">
+                        <label>Year</label>
+                        <select class="form-control" id="disk_year" onchange="changedInput('disk_year');"></select>
+                    </div>
+                    <div class="input-error" id="disk_year-error">* Select Year.</div>
                 </div>
                 <div class="col-md-5">
                     <div class="modal-input" onchange="changedInput('disk_region');">
@@ -107,22 +140,19 @@
                     </div>
                     <div class="input-error" id="disk_region-error">* Select Region.</div>
                 </div>
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>Disk Count</label>
-                        <input type="number" value="1" class="form-control" min="1" step="1" id="disk_count" onchange="changedInput('disk_count')" />
-                    </div>
-                    <div class="input-error" id="disk_count-error">* Input correct Count.</div>
-                </div>
             </div>
             <hr>
-                <div class="d-flex justify-content-between">
-                    <div class="modal-input">
-                        <label>Sub Total</label>
-                        <div class="font-weight-bold" id="disk_price">$ 0.00</div>
-                    </div>
-                    <button type="button" class="btn btn-info" id="add-disk-btn">Add Disk</button>
+            <div class="d-flex justify-content-between">
+                <div class="modal-input d-none">
+                    <label>Year Hours</label>
+                    <div class="font-weight-bold" id="disk_hours">0 hr</div>
                 </div>
+                <div class="modal-input">
+                    <label>Sub Total</label>
+                    <div class="font-weight-bold" id="disk_price">$ 0.00</div>
+                </div>
+                <button type="button" class="btn btn-info" id="add-disk">Add Disk</button>
+            </div>
             <hr>
         </div>
         <!-- Adding Cart Content End -->
@@ -136,11 +166,13 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-uppercase">Cloud Provider</th>
+                            <th scope="col" class="text-uppercase">VM Size</th>
                             <th scope="col" class="text-uppercase">Region</th>
-                            <th scope="col" class="text-uppercase">CPU/Memory</th>
+                            <th scope="col" class="text-uppercase">CPU</th>
+                            <th scope="col" class="text-uppercase">Memory</th>
                             <th scope="col" class="text-uppercase">Quantity</th>
-                            <th scope="col" class="text-uppercase">Year</th>
-                            <th scope="col" class="text-uppercase">Price</th>
+                            <th scope="col" class="text-uppercase">Discounted Price</th>
+                            <th scope="col" class="text-uppercase">Price Without Discount</th>
                         </tr>
                     </thead>
                     <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
@@ -157,13 +189,18 @@
             </div>
             <div class="d-flex flex-column justify-content-end align-items-end">
                 <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Total</div>
+                    <div class="px-4">Total without Discount</div>
                     <div class="h5 font-weight-bold px-md-2" id="total-price">$0.00</div>
+                </div>
+                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                    <div class="px-4">Total with discount:</div>
+                    <div class="h5 font-weight-bold px-md-2" id="total-price-discount">$0.00</div>
                 </div>
             </div>
         </div>
         <!-- Shopping Cart Table End -->
-        <div class="h3 mt-5">Disk Carts</div>
+
+        <div class="h3 mt-5">Shopping Disk</div>
         <div id="table" class="bg-white rounded">
             <hr>
             <hr class="items">
@@ -172,13 +209,13 @@
                     <thead>
                         <tr>
                             <th scope="col" class="text-uppercase">Disk</th>
-                            <th scope="col" class="text-uppercase">Region</th>
                             <th scope="col" class="text-uppercase">Size</th>
+                            <th scope="col" class="text-uppercase">Region</th>
                             <th scope="col" class="text-uppercase">Count</th>
                             <th scope="col" class="text-uppercase">Price</th>
                         </tr>
                     </thead>
-                    <tbody id="disk_carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                    <tbody id="disks"> <!-- Main Table Content (Will be updated with javascript) -->
                     </tbody>
                 </table>
             </div>
@@ -200,7 +237,6 @@
         <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="total-real-price">$0.00</div></div>
     </div>
     <!-- Main Content End -->
-<script src="common.js"></script>
-<script src="onprem.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
