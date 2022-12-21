@@ -26,217 +26,721 @@
         <div class="h3">VM Cost Estimator</div>
         <div>
             <hr>
-            <div class="row justify-content-between">
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>Cloud Provider</label>
-                        <select class="form-control" id="cloud" onchange="changedInput('cloud');"></select>
+            <div class="modal-input">
+                <label>Cloud Provider</label>
+                <div>
+                    <div class="form-check-inline" onclick="showCloud('onprem')">
+                        <label class="form-check-label">
+                          <input type="radio" checked class="form-check-input" name="optradio">On-prem
+                        </label>
                     </div>
-                    <div class="input-error" id="cloud-error">* Select Cloud Provider.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>VM Size</label>
-                        <select class="form-control" id="size" onchange="changedInput('size');"></select>
+                    <div class="form-check-inline" onclick="showCloud('azure')">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="optradio">Azure
+                        </label>
                     </div>
-                    <div class="input-error" id="size-error">* Select VM Size.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>CPU</label>
-                        <select class="form-control" id="cpu" onchange="changedInput('cpu');"></select>
+                    <div class="form-check-inline" onclick="showCloud('gcp')">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="optradio">GCP
+                        </label>
                     </div>
-                    <div class="input-error" id="cpu-error">* Select CPU.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>Memory</label>
-                        <select class="form-control" id="memory" onchange="changedInput('memory');"></select>
+                    <div class="form-check-inline" onclick="showCloud('aws')">
+                        <label class="form-check-label">
+                          <input type="radio" class="form-check-input" name="optradio">AWS
+                        </label>
                     </div>
-                    <div class="input-error" id="cpu-error">* Select CPU.</div>
-                </div>
-                <div class="col-md-5 d-none">
-                    <div class="modal-input">
-                        <label>Weekly</label>
-                        <input class="form-control" id="weekly" value="30" type="number" onchange="changedInput('weekly')"></input>
-                    </div>
-                    <div class="input-error" id="memory-error">* Select Weekly.</div>
-                </div>                
-                <div class="col-md-5 d-none">
-                    <div class="modal-input">
-                        <label>Year</label>
-                        <select class="form-control" id="year" onchange="changedInput('year');"></select>
-                    </div>
-                    <div class="input-error" id="year-error">* Select Year.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input" onchange="changedInput('region');">
-                        <label>Region</label>
-                        <select class="form-control" id="region"></select>
-                    </div>
-                    <div class="input-error" id="region-error">* Select Region.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>VM Count</label>
-                        <input type="number" value="1" class="form-control" min="1" step="1" id="count" onchange="changedInput('count')" />
-                    </div>
-                    <div class="input-error" id="count-error">* Input correct count.</div>
-                </div>    
-            </div>
-            <hr>
-            <div class="d-flex justify-content-between">
-                <div class="modal-input d-none">
-                    <label>Year Hours</label>
-                    <div class="font-weight-bold" id="hours">0</div>
-                </div>
-                <div class="modal-input">
-                    <label>Sub Total</label>
-                    <div class="font-weight-bold" id="price">$ 0.00</div>
-                </div>
-                <button type="button" class="btn btn-info" id="add-btn">Add VM</button>
-            </div>
-            <hr>
-            <div class="row justify-content-between">
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>Disk</label>
-                        <select class="form-control" id="disk" onchange="changedInput('disk');"></select>
-                    </div>
-                    <div class="input-error" id="disk-error">* Select Disk.</div>
-                </div> 
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>Size</label>
-                        <select class="form-control" id="disk_size" onchange="changedInput('disk_size');"></select>
-                    </div>
-                    <div class="input-error" id="disk_size-error">* Select Disk Size.</div>
-                </div> 
-                <div class="col-md-5">
-                    <div class="modal-input">
-                        <label>Count</label>
-                        <select class="form-control" id="disk_count" onchange="changedInput('disk_count');"></select>
-                    </div>
-                    <div class="input-error" id="disk_count-error">* Select Disk Count.</div>
-                </div>    
-                <div class="col-md-5 d-none">
-                    <div class="modal-input">
-                        <label>Weekly</label>
-                        <input class="form-control" id="disk_weekly" value="30" type="number" onchange="changedInput('disk_weekly')"></input>
-                    </div>
-                    <div class="input-error" id="disk_weekly-error">* Select Weekly.</div>
-                </div>                
-                <div class="col-md-5 d-none">
-                    <div class="modal-input">
-                        <label>Year</label>
-                        <select class="form-control" id="disk_year" onchange="changedInput('disk_year');"></select>
-                    </div>
-                    <div class="input-error" id="disk_year-error">* Select Year.</div>
-                </div>
-                <div class="col-md-5">
-                    <div class="modal-input" onchange="changedInput('disk_region');">
-                        <label>Region</label>
-                        <select class="form-control" id="disk_region"></select>
-                    </div>
-                    <div class="input-error" id="disk_region-error">* Select Region.</div>
                 </div>
             </div>
-            <hr>
-            <div class="d-flex justify-content-between">
-                <div class="modal-input d-none">
-                    <label>Year Hours</label>
-                    <div class="font-weight-bold" id="disk_hours">0 hr</div>
+            <!-- Onprem input Begin -->
+            <div target="onprem">
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>CPU</label>
+                            <select class="form-control" id="onprem-cpu" onchange="onprem.changedInput('cpu');"></select>
+                        </div>
+                        <div class="input-error" id="onprem-cpu-error">* Select CPU.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Memory</label>
+                            <select class="form-control" id="onprem-memory" onchange="onprem.changedInput('memory');"></select>
+                        </div>
+                        <div class="input-error" id="onprem-memory-error">* Select Memory.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="onprem.changedInput('region');">
+                            <label>Region</label>
+                            <select class="form-control" id="onprem-region"></select>
+                        </div>
+                        <div class="input-error" id="onprem-region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>VM Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="onprem-count" onchange="onprem.changedInput('count')" />
+                        </div>
+                        <div class="input-error" id="onprem-count-error">* Input correct count.</div>
+                    </div>    
                 </div>
-                <div class="modal-input">
-                    <label>Sub Total</label>
-                    <div class="font-weight-bold" id="disk_price">$ 0.00</div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <div class="modal-input">
+                        <label>Sub Total</label>
+                        <div class="font-weight-bold" id="onprem-price">$ 0.00</div>
+                    </div>
+                    <button type="button" class="btn btn-info" id="onprem-add-btn">Add VM</button>
                 </div>
-                <button type="button" class="btn btn-info" id="add-disk">Add Disk</button>
+                <hr>
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk</label>
+                            <select class="form-control" id="onprem-disk" onchange="onprem.changedInput('disk');"></select>
+                        </div>
+                        <div class="input-error" id="onprem-disk-error">* Select Disk.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="onprem.changedInput('disk_region');">
+                            <label>Region</label>
+                            <select class="form-control" id="onprem-disk_region"></select>
+                        </div>
+                        <div class="input-error" id="onprem-disk_region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="onprem-disk_count" onchange="onprem.changedInput('disk_count')" />
+                        </div>
+                        <div class="input-error" id="onprem-disk_count-error">* Input correct Count.</div>
+                    </div>
+                </div>
+                <hr>
+                    <div class="d-flex justify-content-between">
+                        <div class="modal-input">
+                            <label>Sub Total</label>
+                            <div class="font-weight-bold" id="onprem-disk_price">$ 0.00</div>
+                        </div>
+                        <button type="button" class="btn btn-info" id="onprem-add-disk-btn">Add Disk</button>
+                    </div>
+                <hr>
             </div>
-            <hr>
+            <!-- Onprem input End -->
+            <!-- GCP input Begin -->
+            <div target="gcp">
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="gcp.changedInput('region');">
+                            <label>Region</label>
+                            <select class="form-control" id="gcp-region"></select>
+                        </div>
+                        <div class="input-error" id="gcp-region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="gcp.changedInput('type');">
+                            <label>Type</label>
+                            <select class="form-control" id="gcp-type"></select>
+                        </div>
+                        <div class="input-error" id="gcp-type-error">* Select Type.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>CPU</label>
+                            <select class="form-control" id="gcp-cpu" onchange="gcp.changedInput('cpu');"></select>
+                        </div>
+                        <div class="input-error" id="gcp-cpu-error">* Select CPU.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Memory</label>
+                            <select class="form-control" id="gcp-memory" onchange="gcp.changedInput('memory');"></select>
+                        </div>
+                        <div class="input-error" id="gcp-memory-error">* Select Memory.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>VM Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="gcp-count" onchange="gcp.changedInput('count')" />
+                        </div>
+                        <div class="input-error" id="gcp-count-error">* Input correct count.</div>
+                    </div>    
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <div class="modal-input">
+                        <label>Sub Total</label>
+                        <div class="font-weight-bold" id="gcp-price">$ 0.00</div>
+                    </div>
+                    <button type="button" class="btn btn-info" id="gcp-add-btn">Add VM</button>
+                </div>
+                <hr>
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Type</label>
+                            <select class="form-control" id="gcp-disk_type" onchange="gcp.changedInput('disk_type');"></select>
+                        </div>
+                        <div class="input-error" id="gcp-disk_type-error">* Select Type.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk Size (GB)</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="gcp-disk" onchange="gcp.changedInput('disk')" />
+                        </div>
+                        <div class="input-error" id="gcp-disk-error">* Select Disk.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="gcp.changedInput('disk_region');">
+                            <label>Region</label>
+                            <select class="form-control" id="gcp-disk_region"></select>
+                        </div>
+                        <div class="input-error" id="gcp-disk_region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="gcp-disk_count" onchange="gcp.changedInput('disk_count')" />
+                        </div>
+                        <div class="input-error" id="gcp-disk_count-error">* Input correct Count.</div>
+                    </div>
+                </div>
+                <hr>
+                    <div class="d-flex justify-content-between">
+                        <div class="modal-input">
+                            <label>Sub Total</label>
+                            <div class="font-weight-bold" id="gcp-disk_price">$ 0.00</div>
+                        </div>
+                        <button type="button" class="btn btn-info" id="gcp-add-disk-btn">Add Disk</button>
+                    </div>
+                <hr>
+            </div>
+            <!-- GCP input End -->
+            <!-- AWS input Begin -->
+            <div target="aws">
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="aws.changedInput('region');">
+                            <label>Region</label>
+                            <select class="form-control" id="aws-region"></select>
+                        </div>
+                        <div class="input-error" id="aws-region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="aws.changedInput('type');">
+                            <label>Type</label>
+                            <select class="form-control" id="aws-type"></select>
+                        </div>
+                        <div class="input-error" id="aws-type-error">* Select Type.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="aws.changedInput('sku');">
+                            <label>Sku</label>
+                            <select class="form-control" id="aws-sku"></select>
+                        </div>
+                        <div class="input-error" id="aws-sku-error">* Select Sku.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>CPU</label>
+                            <select class="form-control" id="aws-cpu" onchange="aws.changedInput('cpu');"></select>
+                        </div>
+                        <div class="input-error" id="aws-cpu-error">* Select CPU.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Memory</label>
+                            <select class="form-control" id="aws-memory" onchange="aws.changedInput('memory');"></select>
+                        </div>
+                        <div class="input-error" id="aws-memory-error">* Select Memory.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>VM Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="aws-count" onchange="aws.changedInput('count')" />
+                        </div>
+                        <div class="input-error" id="aws-count-error">* Input correct count.</div>
+                    </div>    
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <div class="modal-input">
+                        <label>Sub Total</label>
+                        <div class="font-weight-bold" id="aws-price">$ 0.00</div>
+                    </div>
+                    <button type="button" class="btn btn-info" id="aws-add-btn">Add VM</button>
+                </div>
+                <hr>
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Type</label>
+                            <select class="form-control" id="aws-disk_type" onchange="aws.changedInput('disk_type');"></select>
+                        </div>
+                        <div class="input-error" id="aws-disk_type-error">* Select Type.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk</label>
+                            <select class="form-control" id="aws-disk" onchange="aws.changedInput('disk');"></select>
+                        </div>
+                        <div class="input-error" id="aws-disk-error">* Select Disk.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="aws.changedInput('disk_region');">
+                            <label>Region</label>
+                            <select class="form-control" id="aws-disk_region"></select>
+                        </div>
+                        <div class="input-error" id="aws-disk_region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="aws-disk_count" onchange="aws.changedInput('disk_count')" />
+                        </div>
+                        <div class="input-error" id="aws-disk_count-error">* Input correct Count.</div>
+                    </div>
+                </div>
+                <hr>
+                    <div class="d-flex justify-content-between">
+                        <div class="modal-input">
+                            <label>Sub Total</label>
+                            <div class="font-weight-bold" id="aws-disk_price">$ 0.00</div>
+                        </div>
+                        <button type="button" class="btn btn-info" id="aws-add-disk-btn">Add Disk</button>
+                    </div>
+                <hr>
+            </div>
+            <!-- AWS input End -->
+            <!-- Azure input Begin -->
+            <div target="azure">
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="azure.changedInput('region');">
+                            <label>Region</label>
+                            <select class="form-control" id="azure-region"></select>
+                        </div>
+                        <div class="input-error" id="azure-region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="azure.changedInput('type');">
+                            <label>Type</label>
+                            <select class="form-control" id="azure-type"></select>
+                        </div>
+                        <div class="input-error" id="azure-type-error">* Select Type.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="azure.changedInput('sku');">
+                            <label>Sku</label>
+                            <select class="form-control" id="azure-sku"></select>
+                        </div>
+                        <div class="input-error" id="azure-sku-error">* Select Sku.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>CPU</label>
+                            <select class="form-control" id="azure-cpu" onchange="azure.changedInput('cpu');"></select>
+                        </div>
+                        <div class="input-error" id="azure-cpu-error">* Select CPU.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Memory</label>
+                            <select class="form-control" id="azure-memory" onchange="azure.changedInput('memory');"></select>
+                        </div>
+                        <div class="input-error" id="azure-memory-error">* Select Memory.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>VM Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="azure-count" onchange="azure.changedInput('count')" />
+                        </div>
+                        <div class="input-error" id="azure-count-error">* Input correct count.</div>
+                    </div>    
+                </div>
+                <hr>
+                <div class="d-flex justify-content-between">
+                    <div class="modal-input">
+                        <label>Sub Total</label>
+                        <div class="font-weight-bold" id="azure-price">$ 0.00</div>
+                    </div>
+                    <button type="button" class="btn btn-info" id="azure-add-btn">Add VM</button>
+                </div>
+                <hr>
+                <div class="row justify-content-between">
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Type</label>
+                            <select class="form-control" id="azure-disk_type" onchange="azure.changedInput('disk_type');"></select>
+                        </div>
+                        <div class="input-error" id="azure-disk_type-error">* Select Type.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk</label>
+                            <select class="form-control" id="azure-disk" onchange="azure.changedInput('disk');"></select>
+                        </div>
+                        <div class="input-error" id="azure-disk-error">* Select Disk.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input" onchange="azure.changedInput('disk_region');">
+                            <label>Region</label>
+                            <select class="form-control" id="azure-disk_region"></select>
+                        </div>
+                        <div class="input-error" id="azure-disk_region-error">* Select Region.</div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="modal-input">
+                            <label>Disk Count</label>
+                            <input type="number" value="1" class="form-control" min="1" step="1" id="azure-disk_count" onchange="azure.changedInput('disk_count')" />
+                        </div>
+                        <div class="input-error" id="azure-disk_count-error">* Input correct Count.</div>
+                    </div>
+                </div>
+                <hr>
+                    <div class="d-flex justify-content-between">
+                        <div class="modal-input">
+                            <label>Sub Total</label>
+                            <div class="font-weight-bold" id="azure-disk_price">$ 0.00</div>
+                        </div>
+                        <button type="button" class="btn btn-info" id="azure-add-disk-btn">Add Disk</button>
+                    </div>
+                <hr>
+            </div>
+            <!-- Azure input End -->
         </div>
         <!-- Adding Cart Content End -->
         <!-- Shopping Cart Table Begin -->
-        <div class="h3 mt-5">Shopping Cart</div>
-        <div id="table" class="bg-white rounded">
-            <hr>
-            <hr class="items">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-uppercase">Cloud Provider</th>
-                            <th scope="col" class="text-uppercase">VM Size</th>
-                            <th scope="col" class="text-uppercase">Region</th>
-                            <th scope="col" class="text-uppercase">CPU</th>
-                            <th scope="col" class="text-uppercase">Memory</th>
-                            <th scope="col" class="text-uppercase">Quantity</th>
-                            <th scope="col" class="text-uppercase">Discounted Price</th>
-                            <th scope="col" class="text-uppercase">Price Without Discount</th>
-                        </tr>
-                    </thead>
-                    <tbody id="carts"> <!-- Main Table Content (Will be updated with javascript) -->
-                    </tbody>
-                </table>
+        <div target="onprem" id="onprem">
+            <div class="h3 mt-5">Shopping Cart</div>
+            <div id="onprem-table" class="bg-white rounded">
+                <hr>
+                <hr class="items">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-uppercase">Cloud Provider</th>
+                                <th scope="col" class="text-uppercase">Region</th>
+                                <th scope="col" class="text-uppercase">CPU/Memory</th>
+                                <th scope="col" class="text-uppercase">Quantity</th>
+                                <th scope="col" class="text-uppercase">Year</th>
+                                <th scope="col" class="text-uppercase">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="onprem-carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                        </tbody>
+                    </table>
+                </div>
             </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-start align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                        <div class="px-4">Items</div>
+                        <div class="h5 font-weight-bold px-md-2" id="onprem-total-count">1</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-end align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total</div>
+                        <div class="h5 font-weight-bold px-md-2" id="onprem-total-price">$0.00</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Shopping Cart Table End -->
+            <div class="h3 mt-5">Disk Carts</div>
+            <div id="onprem-table" class="bg-white rounded">
+                <hr>
+                <hr class="items">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-uppercase">Disk</th>
+                                <th scope="col" class="text-uppercase">Region</th>
+                                <th scope="col" class="text-uppercase">Size</th>
+                                <th scope="col" class="text-uppercase">Count</th>
+                                <th scope="col" class="text-uppercase">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="onprem-disk_carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-start align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                        <div class="px-4">Items</div>
+                        <div class="h5 font-weight-bold px-md-2" id="onprem-total-disk-count">0</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-end align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total</div>
+                        <div class="h5 font-weight-bold px-md-2" id="onprem-total-disk-price">$0.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="onprem-total-real-price">$0.00</div></div>
         </div>
-        <div class="d-flex justify-content-between">
-            <div class="d-flex flex-column justify-content-start align-items-end">
-                <div class="d-flex px-3 pr-md-5 py-1 counttotal">
-                    <div class="px-4">Items</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-count">1</div>
+        <div target="gcp">
+            <div class="h3 mt-5">Shopping Cart</div>
+            <div id="gcp-table" class="bg-white rounded">
+                <hr>
+                <hr class="items">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-uppercase">Cloud Provider</th>
+                                <th scope="col" class="text-uppercase">Region</th>
+                                <th scope="col" class="text-uppercase">Type</th>
+                                <th scope="col" class="text-uppercase">CPU/Memory</th>
+                                <th scope="col" class="text-uppercase">Quantity</th>
+                                <th scope="col" class="text-uppercase">Year</th>
+                                <th scope="col" class="text-uppercase">Discounted Price</th>
+                                <th scope="col" class="text-uppercase">Price Without Discount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gcp-carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="d-flex flex-column justify-content-end align-items-end">
-                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Total without Discount</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-price">$0.00</div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-start align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                        <div class="px-4">Items</div>
+                        <div class="h5 font-weight-bold px-md-2" id="gcp-total-count">1</div>
+                    </div>
                 </div>
-                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Total with discount:</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-price-discount">$0.00</div>
+                <div class="d-flex flex-column justify-content-end align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total without Discount</div>
+                        <div class="h5 font-weight-bold px-md-2" id="gcp-total-price">$0.00</div>
+                    </div>
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total with discount:</div>
+                        <div class="h5 font-weight-bold px-md-2" id="gcp-total-price-discount">$0.00</div>
+                    </div>
                 </div>
             </div>
+            <!-- Shopping Cart Table End -->
+            <div class="h3 mt-5">Disk Carts</div>
+            <div id="gcp-table" class="bg-white rounded">
+                <hr>
+                <hr class="items">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-uppercase">Type</th>
+                                <th scope="col" class="text-uppercase">Disk</th>
+                                <th scope="col" class="text-uppercase">Region</th>
+                                <th scope="col" class="text-uppercase">Count</th>
+                                <th scope="col" class="text-uppercase">Year</th>
+                                <th scope="col" class="text-uppercase">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="gcp-disk_carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-start align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                        <div class="px-4">Items</div>
+                        <div class="h5 font-weight-bold px-md-2" id="gcp-total-disk-count">0</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-end align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total</div>
+                        <div class="h5 font-weight-bold px-md-2" id="gcp-total-disk-price">$0.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="gcp-total-real-price">$0.00</div></div>
         </div>
-        <!-- Shopping Cart Table End -->
-
-        <div class="h3 mt-5">Shopping Disk</div>
-        <div id="table" class="bg-white rounded">
-            <hr>
-            <hr class="items">
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" class="text-uppercase">Disk</th>
-                            <th scope="col" class="text-uppercase">Size</th>
-                            <th scope="col" class="text-uppercase">Region</th>
-                            <th scope="col" class="text-uppercase">Count</th>
-                            <th scope="col" class="text-uppercase">Price</th>
-                        </tr>
-                    </thead>
-                    <tbody id="disks"> <!-- Main Table Content (Will be updated with javascript) -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="d-flex justify-content-between">
-            <div class="d-flex flex-column justify-content-start align-items-end">
-                <div class="d-flex px-3 pr-md-5 py-1 counttotal">
-                    <div class="px-4">Items</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-disk-count">0</div>
+        <div target="aws">
+            <div class="h3 mt-5">Shopping Cart</div>
+            <div id="aws-table" class="bg-white rounded">
+                <hr>
+                <hr class="items">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-uppercase">Cloud Provider</th>
+                                <th scope="col" class="text-uppercase">Region</th>
+                                <th scope="col" class="text-uppercase">Type</th>
+                                <th scope="col" class="text-uppercase">CPU/Memory</th>
+                                <th scope="col" class="text-uppercase">Quantity</th>
+                                <th scope="col" class="text-uppercase">Year</th>
+                                <th scope="col" class="text-uppercase">Discounted Price</th>
+                                <th scope="col" class="text-uppercase">Price Without Discount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aws-carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="d-flex flex-column justify-content-end align-items-end">
-                <div class="d-flex px-3 pr-md-5 py-1 subtotal">
-                    <div class="px-4">Total</div>
-                    <div class="h5 font-weight-bold px-md-2" id="total-disk-price">$0.00</div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-start align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                        <div class="px-4">Items</div>
+                        <div class="h5 font-weight-bold px-md-2" id="aws-total-count">1</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-end align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total without Discount</div>
+                        <div class="h5 font-weight-bold px-md-2" id="aws-total-price">$0.00</div>
+                    </div>
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total with discount:</div>
+                        <div class="h5 font-weight-bold px-md-2" id="aws-total-price-discount">$0.00</div>
+                    </div>
                 </div>
             </div>
+            <!-- Shopping Cart Table End -->
+            <div class="h3 mt-5">Disk Carts</div>
+            <div id="aws-table" class="bg-white rounded">
+                <hr>
+                <hr class="items">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-uppercase">Type</th>
+                                <th scope="col" class="text-uppercase">Disk</th>
+                                <th scope="col" class="text-uppercase">Region</th>
+                                <th scope="col" class="text-uppercase">Size</th>
+                                <th scope="col" class="text-uppercase">Count</th>
+                                <th scope="col" class="text-uppercase">Discounted Price</th>
+                                <th scope="col" class="text-uppercase">Price Without Discount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="aws-disk_carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="d-flex justify-content-between">
+                <div class="d-flex flex-column justify-content-start align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                        <div class="px-4">Items</div>
+                        <div class="h5 font-weight-bold px-md-2" id="aws-total-disk-count">0</div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column justify-content-end align-items-end">
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total without discount:</div>
+                        <div class="h5 font-weight-bold px-md-2" id="aws-total-disk-price">$0.00</div>
+                    </div>
+                    <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                        <div class="px-4">Total with discount:</div>
+                        <div class="h5 font-weight-bold px-md-2" id="aws-total-disk-price-discount">$0.00</div>
+                    </div>
+                </div>
+            </div>
+            <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="aws-total-real-price">$0.00</div></div>
         </div>
-        <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="total-real-price">$0.00</div></div>
+        <div target="azure">
+          <div class="h3 mt-5">Shopping Cart</div>
+          <div id="azure-table" class="bg-white rounded">
+              <hr>
+              <hr class="items">
+              <div class="table-responsive">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th scope="col" class="text-uppercase">Cloud Provider</th>
+                              <th scope="col" class="text-uppercase">Region</th>
+                              <th scope="col" class="text-uppercase">Type</th>
+                              <th scope="col" class="text-uppercase">CPU/Memory</th>
+                              <th scope="col" class="text-uppercase">Quantity</th>
+                              <th scope="col" class="text-uppercase">Year</th>
+                              <th scope="col" class="text-uppercase">Discounted Price</th>
+                              <th scope="col" class="text-uppercase">Price Without Discount</th>
+                          </tr>
+                      </thead>
+                      <tbody id="azure-carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="d-flex justify-content-between">
+              <div class="d-flex flex-column justify-content-start align-items-end">
+                  <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                      <div class="px-4">Items</div>
+                      <div class="h5 font-weight-bold px-md-2" id="azure-total-count">1</div>
+                  </div>
+              </div>
+              <div class="d-flex flex-column justify-content-end align-items-end">
+                  <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                      <div class="px-4">Total without Discount</div>
+                      <div class="h5 font-weight-bold px-md-2" id="azure-total-price">$0.00</div>
+                  </div>
+                  <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                      <div class="px-4">Total with discount:</div>
+                      <div class="h5 font-weight-bold px-md-2" id="azure-total-price-discount">$0.00</div>
+                  </div>
+              </div>
+          </div>
+          <!-- Shopping Cart Table End -->
+          <div class="h3 mt-5">Disk Carts</div>
+          <div id="azure-table" class="bg-white rounded">
+              <hr>
+              <hr class="items">
+              <div class="table-responsive">
+                  <table class="table">
+                      <thead>
+                          <tr>
+                              <th scope="col" class="text-uppercase">Type</th>
+                              <th scope="col" class="text-uppercase">Disk</th>
+                              <th scope="col" class="text-uppercase">Region</th>
+                              <th scope="col" class="text-uppercase">Size</th>
+                              <th scope="col" class="text-uppercase">Count</th>
+                              <th scope="col" class="text-uppercase">Discounted Price</th>
+                              <th scope="col" class="text-uppercase">Price Without Discount</th>
+                          </tr>
+                      </thead>
+                      <tbody id="azure-disk_carts"> <!-- Main Table Content (Will be updated with javascript) -->
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+          <div class="d-flex justify-content-between">
+              <div class="d-flex flex-column justify-content-start align-items-end">
+                  <div class="d-flex px-3 pr-md-5 py-1 counttotal">
+                      <div class="px-4">Items</div>
+                      <div class="h5 font-weight-bold px-md-2" id="azure-total-disk-count">0</div>
+                  </div>
+              </div>
+              <div class="d-flex flex-column justify-content-end align-items-end">
+                  <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                      <div class="px-4">Total without discount:</div>
+                      <div class="h5 font-weight-bold px-md-2" id="azure-total-disk-price">$0.00</div>
+                  </div>
+                  <div class="d-flex px-3 pr-md-5 py-1 subtotal">
+                      <div class="px-4">Total with discount:</div>
+                      <div class="h5 font-weight-bold px-md-2" id="azure-total-disk-price-discount">$0.00</div>
+                  </div>
+              </div>
+          </div>
+          <div class="total-real-price"><div class="px-4">Total Price</div><div class="h5 font-weight-bold px-md-2" id="azure-total-real-price">$0.00</div></div>
+      </div>
     </div>
     <!-- Main Content End -->
-<script src="script.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+    <script src="export-pdf.js"></script>
+    <script src="onprem.js"></script>
+    <script src="gcp.js"></script>
+    <script src="aws.js"></script>
+    <script src="azure.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
