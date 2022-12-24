@@ -1,5 +1,4 @@
 const azure = {
-  API: 'http://localhost:7285/api/',
   // Resource types depend on VM Size
   vmObject: [{ type: 'General Purpose', skuName: 'D2s v4', sku: 'Standard_D2s_v4', cpu: 2, memory: 8 }, 
   { type: 'General Purpose', skuName: 'D4s v4', sku: 'Standard_D4s_v4', cpu: 4, memory: 16 },
@@ -168,7 +167,7 @@ const azure = {
     const priceType = (type === 'General Purpose - Test  / Dev / Entry Level') ? 'DevTestConsumption' : 'Consumption';
     const skus = this.vmObject.filter(itm => itm.type === type).map(obj => obj.sku);
     $.ajax({
-      url: this.API + 'getRetailPricesWithSku',
+      url: API_URL + 'getRetailPricesWithSku',
       method: 'POST',
       data: { filter: { armRegionName: key, serviceName: "Virtual Machines", priceType }, skus}
     })

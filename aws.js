@@ -1,5 +1,4 @@
 const aws = {
-  API: 'http://localhost:7285/api/',
   // Resource types depend on VM Size
   vmObject: [{ type: 'General purpose', sku: 'm4.large', cpu: 2, memory: 8 }, 
     { type: 'General purpose', sku: 'm4.xlarge', cpu: 4, memory: 16 },
@@ -164,7 +163,7 @@ const aws = {
   initPrices () {
     for (let i = 1; i < this.regions.length; i ++) {
       $.ajax({
-        url: this.API + 'getAWSPrice',
+        url: API_URL + 'getAWSPrice',
         method: 'POST'
       })
         .done((msg) => {
