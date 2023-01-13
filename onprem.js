@@ -267,8 +267,8 @@ const onprem = {
             const cart = _carts[i];
             html += `<tr class="cart-item">
             <td>${cart.type}</td>
+            <td>${cart.region}</td>
             <td>${cart.disk}GB</td>
-            <td>${cart.region}GB</td>
             <td>
                 <div class="d-flex align-items-start justify-content-center">
                     <div class="decrease-count" onclick="onprem.decreaseCount(${cart.id})">-</div>
